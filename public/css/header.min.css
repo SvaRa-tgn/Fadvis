@@ -1,0 +1,144 @@
+.header {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 7dvh;
+  background: #ffffff;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  transition: transform 0.5s, -webkit-transform 0.5s;
+}
+
+.header-wrap {
+  width: 50dvw;
+  height: 100%;
+  margin: 0 auto;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 20% 70% 10%;
+  grid-template-columns: 20% 70% 10%;
+}
+
+.logo-module {
+  height: 100%;
+  overflow: hidden;
+}
+
+.logo-content-module {
+  height: 5dvh;
+  text-align: center;
+}
+
+.logo-link {
+  width: 100%;
+  height: 100%;
+  display: block;
+  text-align: left;
+  padding: 1dvh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.logo {
+  width: auto;
+  height: 100%;
+}
+
+.navigation {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.navigation-list {
+  text-align: center;
+}
+
+.navigation-item {
+  display: inline-block;
+  margin: 0 1vw;
+}
+
+.navigation-link {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.3em;
+  color: #8B222A;
+}
+
+.auth-list {
+  height: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+  grid-template-columns: auto auto;
+  -webkit-box-pack: right;
+      -ms-flex-pack: right;
+          justify-content: right;
+  grid-gap: 1.5dvw;
+}
+
+.auth-item {
+  display: -ms-grid;
+  display: grid;
+  height: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 2.3em;
+  color: #8B222A;
+}
+
+.login-link {
+  display: block;
+  color: #8B222A;
+}
+
+.fa-custom {
+  cursor: pointer;
+  position: relative;
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.fa-custom::after {
+  content: attr(data-auth);
+  position: absolute;
+  top: 160%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 0.42em;
+  font-family: "Montserrat", Arial, sans-serif;
+  text-transform: uppercase;
+  color: #8B222A;
+  padding: 0.65vh;
+  border-radius: 1vh;
+  border: 1px solid #8B222A;
+  font-weight: bold;
+  opacity: 0;
+  -webkit-transition: opacity 0.5s ease-in;
+  transition: opacity 0.5s ease-in;
+}
+
+.fa-custom:hover::after {
+  opacity: 0.8;
+  -webkit-transition: opacity 0.5s ease-in;
+  transition: opacity 0.5s ease-in;
+}

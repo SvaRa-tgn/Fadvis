@@ -1,0 +1,72 @@
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+ul, menu {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  color: rgb(76, 99, 115);
+}
+
+a:hover {
+  color: rgba(231, 67, 67, 0.7);
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  max-width: 100%;
+  height: 100%;
+  font-family: "Noto Sans", sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  max-width: 100%;
+  height: 100%;
+  font-size: 10px;
+  position: relative;
+}
+
+.wrapper {
+  display: -ms-grid;
+  display: grid;
+  height: 100%;
+  -ms-grid-rows: 1fr auto;
+  grid-template-rows: 1fr auto;
+}
+
+.no-scroll {
+  overflow: hidden;
+}

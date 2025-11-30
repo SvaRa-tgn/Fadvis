@@ -1,0 +1,126 @@
+.form-wrap {
+  width: 100%;
+  height: 100%;
+}
+
+.form-title {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  font-size: 2em;
+  text-transform: uppercase;
+}
+
+.form {
+  padding: 2dvh 0 5dvh 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 35dvw;
+  height: auto;
+  margin: 0 auto;
+}
+
+.form-block-alt {
+  position: relative;
+  background: rgb(239, 239, 239);
+  padding: 2dvh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 2dvh 0;
+}
+
+.title-form {
+  font-size: 1.5em;
+}
+
+.wrap-description-form {
+  padding-top: 1dvh;
+  font-size: 1.2em;
+}
+
+.checkbox-wrap {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 10% 90%;
+  grid-template-columns: 10% 90%;
+  -ms-grid-rows: 1fr;
+  grid-template-rows: 1fr;
+  padding-bottom: 1dvh;
+}
+
+.padding-form {
+  margin-top: 2dvh;
+}
+
+.checkbox-label {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  font-size: 1.5em;
+}
+
+.checkbox {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+  height: 2.5dvh;
+  accent-color: #8B222A;
+}
+
+.input-wrap {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+  height: auto;
+  -ms-grid-rows: 2dvh 3dvh;
+  grid-template-rows: 2dvh 3dvh;
+  padding-bottom: 1dvh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.input-label {
+  display: -ms-grid;
+  display: grid;
+  height: 2.5dvh;
+  width: 100%;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: end;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+  font-size: 1.5em;
+  color: #000;
+  padding: 0 0 1dvh 1dvw;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.input {
+  outline: none;
+  height: 3vh;
+  width: 100%;
+  font-size: 1.3em;
+  padding-left: 1vh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: none;
+}
+
+.text-area {
+  min-height: 15dvh;
+  max-height: 15dvh;
+  resize: vertical;
+  padding: 2dvh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.attention-wrap {
+  padding-bottom: 2dvh;
+  font-size: 1.1em;
+}
