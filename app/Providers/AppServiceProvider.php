@@ -24,10 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        /**if ($this->app->environment('production')) {
+        if ($this->app->environment('production')) {
             $this->app['request']->server->set('HTTPS','on');
             URL::forceScheme('https');
-        }*/
+        }
 
         Validator::extend('cyrillic', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^[\p{Cyrillic}\d\s\-]+$/u', $value);
