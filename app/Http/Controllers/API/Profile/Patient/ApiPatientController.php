@@ -9,7 +9,6 @@ use App\Exceptions\CreateModelException;
 use App\Http\Requests\Profile\Patient\CreatePatientRequest;
 use App\Http\Requests\Profile\Patient\UpdatePatientRequest;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 

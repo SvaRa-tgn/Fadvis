@@ -7,8 +7,8 @@ use App\Http\Controllers\API\Admin\Product\ApiProductController;
 use App\Http\Controllers\API\Admin\User\ApiUserController;
 use App\Http\Controllers\API\Page\ApiPageController;
 use App\Http\Controllers\API\Pdf\ApiPdfController;
-use App\Http\Controllers\API\Profile\ApiPatientController;
 use App\Http\Controllers\API\Profile\Order\ApiOrderController;
+use App\Http\Controllers\API\Profile\Patient\ApiPatientController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use Illuminate\Support\Facades\Route;
 
