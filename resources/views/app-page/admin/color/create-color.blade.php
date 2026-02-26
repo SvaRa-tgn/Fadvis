@@ -1,15 +1,15 @@
 @extends('page.admin-page')
 @section('admin-content')
     <main class="main">
-        <div class="main-content">
-            <section class="form-wrap">
-                <div class="form-title-box">
-                    <a class="link-title" href="{{route('admin.color.list')}}">Назад</a>
-                    <div class="title-box">
-                        Создание Цвета
+        <div class="admin">
+            <section class="wrap-user-data-profile user-data">
+                <div class="admin-title">
+                    <div class="admin-title-page">
+                        Создать цвет
                     </div>
                 </div>
-                <form class="form-admin js-response" method="POST" action="{{ route('api.v1.color.create') }}" enctype="multipart/form-data">
+
+                <form class="js-response" data-form="js-create" method="POST" action="{{ route('api.v1.color.create') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-block form-block-alt">
                         <div class="input-wrap nameError">
@@ -28,19 +28,24 @@
                         </div>
                     </div>
 
-
-                    <div class="button-box">
-                        <a class="user-data-edit red-color password-switch " href="{{route('admin.category.list')}}">Назад</a>
-
-                        <div class="wrap-button js-button ">
-                            <button class="user-data-edit green-color">Создать</button>
+                    <div class="regular-button position-column-2-2">
+                        <div class="button-box">
+                            <a class="button-link red-color" href="{{route('admin.color.list')}}">
+                                Отменить
+                            </a>
                         </div>
 
-                        <div class="wrap-update-button js-preloader hide">
-                            <div class="wrap-spin ">
-                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <div class="button-box">
+                            <button class="button-link js-button green-color">
+                                Создать
+                            </button>
+
+                            <div class="await-response js-preloader hide">
+                                <div class="wrap-spin ">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </div>
+                                <article>Обработка</article>
                             </div>
-                            <article>Обработка</article>
                         </div>
                     </div>
                 </form>

@@ -12,5 +12,6 @@ interface IProductRepository
 {
     public function create(CreateProductDTO $dto, array $image): Product;
     public function update(UpdateProductDTO $dto, array $image = null): Product;
-    public function findByStatus(Status $catalogStatus): ?Collection;
+    public function findById(int $id): Product;
+    public function getActive(): ?Collection;
 }

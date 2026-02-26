@@ -9,7 +9,7 @@
             <div class="form-title">
                 Новый пароль
             </div>
-            <form class="form js-response" method="POST" action="{{ route('api.v1.new.password') }}" enctype="multipart/form-data">
+            <form class="form js-response" data-form="js-update" method="POST" action="{{ route('api.v1.new.password') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-block form-block-alt">
                     <input type="hidden" name="token" value="{{ $token }}">
@@ -26,16 +26,17 @@
                 </div>
 
                 <div class="form-block">
+                    <div class="button-box">
+                        <button class="button-link js-button red-color">
+                            Сохранить пароль
+                        </button>
 
-                    <div class="wrap-button js-button">
-                        <button class="button">Сохранить</button>
-                    </div>
-
-                    <div class="wrap-pop-up-button js-preloader hide">
-                        <div class="wrap-spin ">
-                            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <div class="await-response js-preloader hide">
+                            <div class="wrap-spin ">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </div>
+                            <article>Обработка</article>
                         </div>
-                        <article>Обработка</article>
                     </div>
                 </div>
             </form>

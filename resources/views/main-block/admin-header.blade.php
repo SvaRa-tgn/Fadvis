@@ -1,12 +1,12 @@
 <body class="visible">
 <div class="wrapper">
-    <header class="header admin-header" id="home">
-        <div class="header-wrap admin-header-wrap">
-            <section class="logo-module">
-                <a href="{{route('main')}}" class="logo-link">
-                    <img class="logo" src="{{asset('img/logo/fadvis-logo-cropped.svg')}}" alt="Fadvis">
+    <header class="header" id="home">
+        <div class="navigation">
+            <div class="logo-box">
+                <a href="{{route('main')}}" class="logo">
+                    <img class="logo-link" src="{{asset('img/logo/fadvis.svg')}}" alt="Fadvis">
                 </a>
-            </section>
+            </div>
 
             <section class="admin-header-title">
                 Административная панель

@@ -16,14 +16,14 @@ class MasterAccess
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param Request $request
+     * @param Closure(Request): (Response) $next
+     * @return Response
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role !== UserRoles::MASTER->value) {
-            throw new ErrorException(
-                'Access denied.',
-            );
+        if ($request->user()->role !== UserRoles::MASTER) {
+            return redirect()->route('main');
         }
 
         return $next($request);

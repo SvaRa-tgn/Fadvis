@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enum\MessengerType;
 use App\Enum\Status;
 use App\Enum\UserRoles;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int $id
  * @property string $name
  * @property string $surname
- * @property string $patronymic
+ * @property ?string $patronymic
  * @property string $slug
  * @property string $role
  * @property string $email
@@ -27,12 +28,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $address
  * @property ?string $inn
  * @property ?string $ogrn
- * @property string status
+ * @property string $status
  * @property string $password
  * @property Collection $patients
  * @property Collection $orders
- * @method static User find(int $id)
- * @method static where(string $value, int|string $criteria)
  */
 class User extends Authenticatable
 {
@@ -62,29 +61,21 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'role'              => UserRoles::class,
+        'status'            => Status::class,
+        'messenger'         => MessengerType::class
+    ];
+
     public function patients(): HasMany
     {
-        return $this->HasMany(Patient::class);
+        return $this->hasMany(Patient::class);
     }
 
     public function orders(): HasMany
     {
-        return $this->HasMany(Order::class);
-    }
-
-    public function isMaster(): bool
-    {
-        return $this->role === UserRoles::MASTER->value;
-    }
-
-    public function getRole(): UserRoles
-    {
-        return UserRoles::tryFrom($this->role);
-    }
-
-    public function getStatus(): Status
-    {
-        return Status::tryFrom($this->status);
+        return $this->hasMany(Order::class);
     }
 }
 

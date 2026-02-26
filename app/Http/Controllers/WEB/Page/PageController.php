@@ -10,6 +10,7 @@ use App\Interfaces\ICategoryRepository;
 use App\Interfaces\IColorRepository;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -24,17 +25,29 @@ class PageController extends Controller
     {
         return view(
             view: '/app-page/page/catalog',
-            data: ['categories' => $this->categoryRepository->findByStatus(Status::ACTIVE)]);
+            data: [
+                'user'       => Auth::check() ? Auth::user() : null,
+                'categories' => $this->categoryRepository->findByStatus(Status::ACTIVE),
+                'title'      => 'FADVIS: Каталог. Изготовление протезов. Протезы для рук и кистей. Протезы активные и пассивные.',
+            ]);
     }
 
     /**
-     * @param ShowCategoryAction $action
      * @param Category $category
      * @return View
      */
-    public function showCategory(ShowCategoryAction $action, Category $category): View
+    public function showCategory(Category $category): View
     {
-        return $action->execute($category);
+        return view(
+            view: '/app-page/page/category',
+            data: [
+                'user'         => Auth::check() ? Auth::user() : null,
+                'category'     => $category,
+                'products'     => $category->products,
+                'descriptions' => explode("\r\n", $category->description),
+                'title'        => 'FADVIS: ' . $category->name . '. Изготовление протезов. Протезы для рук и кистей. Протезы активные и пассивные.',
+            ],
+    );
     }
 
     /**
@@ -46,10 +59,11 @@ class PageController extends Controller
         return view(
             view: '/app-page/page/product',
             data: [
-                'product' => $product,
+                'user'         => Auth::check() ? Auth::user() : null,
+                'product'      => $product,
                 'descriptions' => explode("\r\n", $product->description),
-                'colors'   => $this->colorRepository->findByStatus(Status::ACTIVE),
-                'images'   => $product->images,
+                'images'       => $product->images,
+                'title'        => 'FADVIS: '. $product->name .'. Изготовление протезов. Протезы для рук и кистей. Протезы активные и пассивные.',
             ]
         );
     }
@@ -57,12 +71,25 @@ class PageController extends Controller
     /** @return View */
     public function showPriceForm(): View
     {
-        return view('/app-page/page/price-form');
+        return view(
+            view: '/app-page/page/price-form',
+            data: [
+                'user'  => Auth::check() ? Auth::user() : null,
+                'title' => 'FADVIS: Запросить прайс. Изготовление протезов. Протезы для рук и кистей. Протезы активные и пассивные.',
+            ]
+        );
     }
 
     /** @return View */
     public function showProthesisForm(): View
     {
-        return view('/app-page/page/prothesis-form', ['ages' => AgePeriod::getAllPeriod()]);
+        return view(
+            view: '/app-page/page/prothesis-form',
+            data: [
+                'user'  => Auth::check() ? Auth::user() : null,
+                'ages'  => AgePeriod::getAllPeriod(),
+                'title' => 'FADVIS: Запросить протез. Изготовление протезов. Протезы для рук и кистей. Протезы активные и пассивные.',
+            ],
+        );
     }
 }

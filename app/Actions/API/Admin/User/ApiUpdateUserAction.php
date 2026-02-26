@@ -5,12 +5,12 @@ namespace App\Actions\API\Admin\User;
 use App\DTO\Admin\User\UpdateUserDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\UserResource;
 use App\Interfaces\IFindRoute;
 use App\Interfaces\IUserRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiUpdateUserAction
@@ -20,14 +20,18 @@ class ApiUpdateUserAction
         private readonly IFindRoute $findRoute,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param UpdateUserDTO $dto
+     * @return JsonResponse
+     * @throws CreateModelException
+     */
     public function execute(UpdateUserDTO $dto): JsonResponse
     {
         try {
             $user = $this->userRepository->update($dto);
 
         } catch (Exception $e) {
-            throw new Exception(
+            throw new CreateModelException(
                 message: ErrorType::ERROR_INFO->caption(),
             );
         }
@@ -36,9 +40,8 @@ class ApiUpdateUserAction
             data: [
                 'data'    => new UserResource($user),
                 'message' => [
-                    'title'   => PopUpContent::UPDATE_SUCCESS->caption(),
-                    'message' => PopUpContent::UPDATE_SUCCESS_INFO->caption(),
-                    'route'   => $this->findRoute->getRoute($dto),
+                    'message' => PopUpContent::UPDATE_SUCCESS->caption(),
+                    'link'    => $this->findRoute->getRoute($dto),
                 ],
             ],
             status: Response::HTTP_OK,

@@ -14,12 +14,12 @@ class ProposalProthesisRepository implements IProposalProthesisRepository
         $proposalProthesis = new ProposalProthesis();
         $proposalProthesis->surname = $dto->surname;
         $proposalProthesis->name = $dto->name;
-        $proposalProthesis->patronymic = $dto->patronymic;
+        $proposalProthesis->patronymic = $dto->patronymic ?? null;
         $proposalProthesis->email = $dto->email;
         $proposalProthesis->phone = $dto->phone;
         $proposalProthesis->city = $dto->city;
         $proposalProthesis->age_period = $dto->agePeriod;
-        $proposalProthesis->prothesis_type = $dto->type;
+        $proposalProthesis->prothesis_level = $dto->level;
         $proposalProthesis->prothesis_function = $dto->function;
         $proposalProthesis->is_program = $dto->isProgram;
         $proposalProthesis->questions = $dto->questions;

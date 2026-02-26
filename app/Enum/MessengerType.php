@@ -20,6 +20,15 @@ enum MessengerType: string implements EnumWithCaption
         };
     }
 
+    public static function values(): array
+    {
+        return [
+            self::TELEGRAM->value,
+            self::WHATS_APP->value,
+            self::MAX->value,
+        ];
+    }
+
     public static function getAllMessenger(): array
     {
         return [

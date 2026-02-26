@@ -5,6 +5,7 @@ namespace App\Actions\API\Admin\User;
 use App\DTO\Admin\User\CreateUserDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\UserResource;
 use App\Interfaces\IUserRepository;
 use App\Mail\RegistrationMail;
@@ -13,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiCreateUserAction
 {
@@ -20,7 +22,11 @@ class ApiCreateUserAction
         private readonly IuserRepository $userRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param CreateUserDTO $dto
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(CreateUserDTO $dto): JsonResponse
     {
         try {
@@ -31,8 +37,8 @@ class ApiCreateUserAction
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
-                message: ErrorType::ERROR_INFO->caption() . $e->getMessage(),
+            throw new CreateModelException(
+                message: ErrorType::ERROR_INFO->caption(),
             );
         }
 
@@ -40,8 +46,8 @@ class ApiCreateUserAction
             data: [
                 'data'    => new UserResource($user),
                 'message' => [
-                    'title' => PopUpContent::REG_SUCCESS->caption(),
-                    'message' => PopUpContent::REG_SUCCESS_INFO->caption(),
+                    'message' => PopUpContent::REG_SUCCESS->caption(),
+                    'link'    => route('admin.user.list'),
                 ],
             ],
             status: Response::HTTP_CREATED,

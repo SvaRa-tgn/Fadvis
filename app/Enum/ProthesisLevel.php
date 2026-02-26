@@ -17,13 +17,13 @@ enum ProthesisLevel: string implements EnumWithCaption
     public function caption(): string
     {
         return match ($this) {
-            self::SHOULDER_KNOT  => 'плечевой узел',
-            self::ELBOW_KNOT     => 'локтевой узел',
-            self::WRIST_KNOT     => 'запястный узел',
-            self::NOZZLE         => 'насадка',
-            self::WRIST          => 'пястье',
-            self::FINGER         => 'палец',
-            self::UNIVERSAL_KNOT => 'универсальный узел',
+            self::SHOULDER_KNOT  => 'Плечевой узел',
+            self::ELBOW_KNOT     => 'Локтевой узел',
+            self::WRIST_KNOT     => 'Запястный узел',
+            self::NOZZLE         => 'Насадка',
+            self::WRIST          => 'Пястье',
+            self::FINGER         => 'Палец',
+            self::UNIVERSAL_KNOT => 'Универсальный узел',
         };
     }
 

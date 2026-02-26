@@ -5,9 +5,13 @@ namespace App\Http\Requests\Admin\Color;
 use App\DTO\Admin\Color\UpdateColorDTO;
 use App\Enum\Status;
 use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
 use App\Exceptions\ErrorException;
 use App\Http\Requests\ApiRequest;
 use App\Models\Color;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+
 
 class UpdateColorRequest extends ApiRequest
 {
@@ -27,8 +31,10 @@ class UpdateColorRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'name'    => ['nullable', 'string', 'unique:colors', 'max:20', 'cyrillic'],
-            'article' => ['nullable', 'string', 'unique:colors', 'max:20'],
+            'name'    => ['nullable', 'string', Rule::unique('colors', 'name')
+                ->ignore($this->route('color')), 'max:20', 'cyrillic'],
+            'article' => ['nullable', 'string', Rule::unique('colors', 'article')
+                ->ignore($this->route('color')), 'max:20'],
             'status'  => ['nullable', 'string', 'max:20'],
             'img'     => ['nullable', 'image', 'max:4048'],
         ];
@@ -47,21 +53,23 @@ class UpdateColorRequest extends ApiRequest
         ];
     }
 
-    /** DTO после валидации данных
+    /**
+     * DTO после валидации данных
      *
-     * @throws ErrorException
+     * @throws BadRequestException
      */
     public function getDto(): UpdateColorDTO
     {
-        if ($this->user()->role !== UserRoles::MASTER->value) {
-            throw new ErrorException(
-                message: 'Страница не найдена',
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
             );
         }
 
         return new UpdateColorDTO(
-            color: Color::find($this->route('id')),
+            color: Color::findOrFail($this->route('color')),
             status: Status::tryFrom($this->input('status')),
+            slug: Str::of($this->input('name'))->slug('-'),
             name: $this->input('name'),
             article: $this->input('article'),
             img: $this->file('img'),

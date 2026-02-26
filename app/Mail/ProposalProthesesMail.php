@@ -48,17 +48,18 @@ class ProposalProthesesMail extends Mailable
                 'level' => 'success',
                 'greeting' => 'Здравствуйте, ' . $this->user->surname . ' ' . $this->user->name . '!',
                 'introLines' => [
-                    'Заявка на протез от: ' . $this->proposalProthesis->surname . ' '
-                    . $this->proposalProthesis->name . ' ' . $this->proposalProthesis->patronymic,
+                    'Заявка на протез от: ' . $this->proposalProthesis->surname. ' '
+                    . $this->proposalProthesis->name . ' '
+                    . ($this->proposalProthesis->patronymic ? $this->proposalProthesis->patronymic : ''),
                     'телефон: ' . $this->proposalProthesis->phone,
                     'email: ' . $this->proposalProthesis->email,
                     'город: ' . $this->proposalProthesis->city,
                     ],
                 'outroLines' => [
-                    'возраст: ' . $this->proposalProthesis->age_period->caption(),
+                    'Возраст: ' . $this->proposalProthesis->age_period->caption(),
                     'Есть ли ИПРА или ПРП: ' . $program,
                     'Тип функциональности: ' . $this->proposalProthesis->prothesis_function->caption(),
-                    'Тип протеза: ' . $this->proposalProthesis->prothesis_type->caption(),
+                    'Тип протеза: ' . $this->proposalProthesis->prothesis_level->caption(),
                     'Вопросы: ' . $this->proposalProthesis->questions,
                 ],
                 'salutation' => 'С уважением, Команда '. config('app.name') . '!',

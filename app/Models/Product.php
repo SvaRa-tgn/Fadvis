@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Enum\ProthesisLevel;
-use App\Enum\Status;
+use App\Enum\ProthesisGrip;
 use App\Enum\CountryMade;
 use App\Enum\ManufacturerList;
+use App\Enum\ProthesisLevel;
 use App\Enum\ProthesisSide;
 use App\Enum\ProthesisSize;
 use App\Enum\ProthesisType;
+use App\Enum\ProthesisSystem;
+use App\Enum\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -23,10 +24,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $category_id
  * @property Category $category
  * @property string $type
+ * @property ?string $grip
  * @property string $description
  * @property string $size
  * @property string $side
  * @property string $level
+ * @property string $system
  * @property int $volume_size
  * @property int $length_size
  * @property float $price
@@ -39,45 +42,26 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $path
  * @property string $status
  * @property ProductImage $images
- * @method static Product find(int $id)
  */
 class Product extends Model
 {
     use HasFactory;
 
-    public function getStatus(): Status
-    {
-        return Status::tryFrom($this->status);
-    }
+    protected $casts = [
+        'status'       => Status::class,
+        'manufacturer' => ManufacturerList::class,
+        'side'         => ProthesisSide::class,
+        'size'         => ProthesisSize::class,
+        'type'         => ProthesisType::class,
+        'level'        => ProthesisLevel::class,
+        'made'         => CountryMade::class,
+        'grip'         => ProthesisGrip::class,
+        'system'       => ProthesisSystem::class,
+    ];
 
-    public function getType(): ProthesisType
+    public function getRouteKeyName(): string
     {
-        return ProthesisType::tryFrom($this->type);
-    }
-
-    public function getLevel(): ProthesisLevel
-    {
-        return ProthesisLevel::tryFrom($this->level);
-    }
-
-    public function getSize(): ProthesisSize
-    {
-        return ProthesisSize::tryFrom($this->size);
-    }
-
-    public function getSide(): ProthesisSide
-    {
-        return ProthesisSide::tryFrom($this->side);
-    }
-
-    public function getMade(): CountryMade
-    {
-        return CountryMade::tryFrom($this->made);
-    }
-
-    public function getManufacturer()
-    {
-        return ManufacturerList::tryFrom($this->manufacturer);
+        return 'slug';
     }
 
     public function category(): BelongsTo
@@ -93,5 +77,10 @@ class Product extends Model
     public function images(): belongsToMany
     {
         return $this->belongsToMany(Image::class, 'product_images', 'product_id', 'image_id');
+    }
+
+    public function getFormattedTotalAttribute(): string
+    {
+        return number_format($this->price, 2, '.', ' ');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin\Color;
 
 use App\DTO\Admin\Color\CreateColorDTO;
 use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
 use App\Exceptions\ErrorException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -48,14 +49,16 @@ class CreateColorRequest extends FormRequest
         ];
     }
 
-    /** DTO после валидации данных
-     * @throws ErrorException
+    /**
+     * DTO после валидации данных
+     *
+     * @throws BadRequestException
      */
     public function getDto(): CreateColorDTO
     {
-        if ($this->user()->role !== UserRoles::MASTER->value) {
-            throw new ErrorException(
-                message: 'Страница не найдена',
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
             );
         }
 

@@ -23,10 +23,9 @@ class Color extends Model
 {
     use HasFactory;
 
-    public function getStatus(): Status
-    {
-        return Status::tryFrom($this->status);
-    }
+    protected $casts = [
+        'status' => Status::class,
+    ];
 
     public function products(): HasMany
     {

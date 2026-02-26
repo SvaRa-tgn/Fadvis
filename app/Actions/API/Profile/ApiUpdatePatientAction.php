@@ -2,21 +2,18 @@
 
 namespace App\Actions\API\Profile;
 
-use App\DTO\Admin\Color\UpdateColorDTO;
 use App\DTO\Profile\Patient\UpdatePatientDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
-use App\Enum\StoragePath;
-use App\Http\Resources\CategoryResource;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\PatientResource;
-use App\Interfaces\IColorRepository;
 use App\Interfaces\IPatientRepository;
 use App\Models\User;
-use App\Service\StorageService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiUpdatePatientAction
 {
@@ -24,7 +21,12 @@ class ApiUpdatePatientAction
         private readonly IPatientRepository $patientRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param UpdatePatientDTO $dto
+     * @param User $user
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(UpdatePatientDTO $dto, User $user): JsonResponse
     {
         try {
@@ -34,7 +36,7 @@ class ApiUpdatePatientAction
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
+            throw new CreateModelException(
                 message: ErrorType::ERROR_INFO->caption(),
             );
         }
@@ -43,9 +45,8 @@ class ApiUpdatePatientAction
             data: [
                 'data'    => new PatientResource($patient),
                 'message' => [
-                    'title'   => PopUpContent::PATIENT_UPDATE_SUCCESS->caption(),
-                    'message' => PopUpContent::PATIENT_UPDATE_SUCCESS_INFO->caption(),
-                    'route'   => route('profile.patient.list', $user->id),
+                    'message' => PopUpContent::PATIENT_UPDATE_SUCCESS->caption(),
+                    'link'    => route('profile.patient.list', $user),
                 ],
             ],
             status: Response::HTTP_ACCEPTED,

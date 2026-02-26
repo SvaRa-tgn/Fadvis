@@ -1,6 +1,8 @@
 <?php
 
+use App\Enum\ProthesisGrip;
 use App\Enum\ProthesisLevel;
+use App\Enum\ProthesisSystem;
 use App\Enum\Status;
 use App\Enum\ManufacturerList;
 use App\Enum\ProthesisSide;
@@ -27,15 +29,17 @@ return new class extends Migration
             $table->unsignedBigInteger('color_id');
             $table->foreign('color_id')->references('id')->on('colors');
             $table->enum('status', Status::values())->default(Status::ACTIVE->value);
+            $table->enum('grip', ProthesisGrip::values())->nullable();
             $table->enum('type', ProthesisType::values());
             $table->enum('level', ProthesisLevel::values());
+            $table->enum('system', ProthesisSystem::values());
             $table->string('description', 1000);
             $table->enum('size', ProthesisSize::values());
             $table->enum('side', ProthesisSide::values());
             $table->integer('volume_size')->nullable()->default(null);
             $table->integer('length_size')->nullable()->default(null);
             $table->boolean('is_select_color')->default(true);
-            $table->integer('price');
+            $table->decimal('price', 10, 2);
             $table->string('made', 15);
             $table->enum('manufacturer', ManufacturerList::values());
             $table->string('link', 255);

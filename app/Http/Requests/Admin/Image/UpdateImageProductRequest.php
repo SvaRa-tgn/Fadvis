@@ -4,6 +4,9 @@ namespace App\Http\Requests\Admin\Image;
 
 use App\DTO\Admin\Image\AddImageDTO;
 use App\DTO\Admin\Image\UpdateImageProductDTO;
+use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
+use App\Exceptions\ErrorException;
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
@@ -37,11 +40,21 @@ class UpdateImageProductRequest extends FormRequest
         ];
     }
 
-    /** DTO после валидации данных */
+    /**
+     * DTO после валидации данных
+     *
+     * @throws BadRequestException
+     */
     public function getDto(): UpdateImageProductDTO
     {
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
+            );
+        }
+
         return new UpdateImageProductDTO(
-            product: Product::find($this->route('product')),
+            product: Product::findOrFail($this->route('product')),
             image: Image::find($this->route('image')),
             image_product: $this->file('image_product'),
         );

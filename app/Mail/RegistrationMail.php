@@ -44,7 +44,7 @@ class RegistrationMail extends Mailable
                 'level' => 'success',
                 'greeting' => 'Здравствуйте, ' . $this->user->surname . ' ' . $this->user->name . '!',
                 'actionText' => 'Перейти на сайт',
-                'actionUrl' => config('app.url').'8080',
+                'actionUrl' => config('app.url'),
                 'introLines' => ['Вы получили это письмо потому, что запрашивали регистрацию на нашем сайте.'],
                 'outroLines' => [
                     'Ваш логин для личного кабинета: ' . $this->user->email,
@@ -52,7 +52,8 @@ class RegistrationMail extends Mailable
                     'Пароль можно сменить в личном кабинете.'
                 ],
                 'salutation' => 'С уважением, Команда '. config('app.name') . '!',
-            ]
+            ],
+
         );
     }
 

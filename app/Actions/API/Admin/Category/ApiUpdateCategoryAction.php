@@ -6,6 +6,7 @@ use App\DTO\Admin\Category\UpdateCategoryDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
 use App\Enum\StoragePath;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\CategoryResource;
 use App\Interfaces\ICategoryRepository;
 use App\Service\StorageService;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiUpdateCategoryAction
 {
@@ -20,7 +22,11 @@ class ApiUpdateCategoryAction
         private readonly ICategoryRepository $categoryRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param UpdateCategoryDTO $dto
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(UpdateCategoryDTO $dto): JsonResponse
     {
         try {
@@ -40,7 +46,7 @@ class ApiUpdateCategoryAction
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
+            throw new CreateModelException(
                 message: ErrorType::ERROR_INFO->caption(),
             );
         }
@@ -49,9 +55,8 @@ class ApiUpdateCategoryAction
             data: [
                 'data'    => new CategoryResource($category),
                 'message' => [
-                    'title'   => PopUpContent::CATEGORY_UPDATE_SUCCESS->caption(),
-                    'message' => PopUpContent::CATEGORY_UPDATE_SUCCESS_INFO->caption(),
-                    'route'   => route('admin.category.list'),
+                    'message' => PopUpContent::CATEGORY_UPDATE_SUCCESS->caption(),
+                    'link'    => route('admin.category.update', $category),
                 ],
             ],
             status: Response::HTTP_ACCEPTED,

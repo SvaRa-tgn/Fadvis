@@ -13,8 +13,7 @@ readonly class UpdateCategoryDTO
         public ?string  $name = null,
         public ?string  $slug = null,
         public ?string  $second_name = null,
-        public ?string  $description_index = null,
-        public ?string  $description_page = null,
+        public ?string  $description = null,
         public ?string  $img = null,
     ) {}
 }

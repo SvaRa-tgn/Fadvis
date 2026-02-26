@@ -4,13 +4,13 @@ namespace App\DTO\Page;
 
 use App\Enum\AgePeriod;
 use App\Enum\ProthesisFunction;
-use App\Enum\ProthesisType;
+use App\Enum\ProthesisLevel;
 
 readonly class CreateProposalProthesisDTO
 {
     public function __construct(
         public AgePeriod         $agePeriod,
-        public ProthesisType     $type,
+        public ProthesisLevel    $level,
         public ProthesisFunction $function,
         public string            $name,
         public string            $surname,

@@ -6,6 +6,7 @@ use App\DTO\Admin\Category\CreateCategoryDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
 use App\Enum\StoragePath;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\CategoryResource;
 use App\Interfaces\ICategoryRepository;
 use App\Service\StorageService;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiCreateCategoryAction
 {
@@ -20,7 +22,11 @@ class ApiCreateCategoryAction
         private readonly ICategoryRepository $categoryRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param CreateCategoryDTO $dto
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(CreateCategoryDTO $dto): JsonResponse
     {
         try {
@@ -32,8 +38,8 @@ class ApiCreateCategoryAction
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
-                message: ErrorType::ERROR_INFO->caption() . $e->getMessage(),
+            throw new CreateModelException(
+                message: ErrorType::ERROR_INFO->caption(),
             );
         }
 
@@ -41,9 +47,8 @@ class ApiCreateCategoryAction
             data: [
                 'data'    => new CategoryResource($category),
                 'message' => [
-                    'title'   => PopUpContent::CATEGORY_CREATE_SUCCESS->caption(),
-                    'message' => PopUpContent::CATEGORY_CREATE_SUCCESS_INFO->caption(),
-                    'route'   => route('admin.category.list'),
+                    'message' => PopUpContent::CATEGORY_CREATE_SUCCESS->caption(),
+                    'link'    => route('admin.category.list'),
                 ],
             ],
             status: Response::HTTP_CREATED,

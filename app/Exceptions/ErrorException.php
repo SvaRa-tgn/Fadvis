@@ -6,10 +6,11 @@ use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ErrorException extends Exception
 {
-    public function render(Request $request): Response
+    public function render($request): Response
     {
         return new JsonResponse([
             'code'    => Response::HTTP_NOT_FOUND,

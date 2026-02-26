@@ -3,12 +3,15 @@
 namespace App\Http\Requests\Admin\Product;
 
 use App\DTO\Admin\Product\CreateProductDTO;
+use App\Enum\ProthesisGrip;
 use App\Enum\ProthesisLevel;
+use App\Enum\ProthesisSystem;
 use App\Enum\Status;
 use App\Enum\ProthesisSide;
 use App\Enum\ProthesisSize;
 use App\Enum\ProthesisType;
 use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
 use App\Exceptions\ErrorException;
 use App\Models\Category;
 use App\Models\Color;
@@ -41,6 +44,8 @@ class CreateProductRequest extends FormRequest
             'size'            => ['required', 'string', 'max:20'],
             'side'            => ['required', 'string', 'max:15'],
             'level'           => ['required', 'string', 'max:15'],
+            'grip'            => ['nullable', 'string', 'max:15'],
+            'system'          => ['required', 'string', 'max:15'],
             'volume_size'     => ['nullable', 'string', 'max:30'],
             'length_size'     => ['nullable', 'string', 'max:30'],
             'color_id'        => ['required', 'int'],
@@ -74,6 +79,7 @@ class CreateProductRequest extends FormRequest
             'side.required'            => 'Сторона протезирования должна быть обязательно',
             'side.max'                 => 'Сторона протезирования не должна превышать 20 символов',
             'level.required'           => 'Узел протеза должен быть обязательно',
+            'system.required'          => 'Система протеза должна быть обязательно',
             'volume_size.max'          => 'Объем пястья не должен превышать 30 символов',
             'length_size.max'          => 'Длина не должна превышать 30 символов',
             'color_id.required'        => 'Цвет должен быть обязательно',
@@ -88,14 +94,16 @@ class CreateProductRequest extends FormRequest
         ];
     }
 
-    /** DTO после валидации данных
-     * @throws ErrorException
+    /**
+     * DTO после валидации данных
+     *
+     * @throws BadRequestException
      */
     public function getDto(): CreateProductDTO
     {
-        if ($this->user()->role !== UserRoles::MASTER->value) {
-            throw new ErrorException(
-                message: 'Страница не найдена',
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
             );
         }
 
@@ -106,6 +114,7 @@ class CreateProductRequest extends FormRequest
             size: ProthesisSize::tryFrom($this->input('size')),
             side: ProthesisSide::tryFrom($this->input('side')),
             level: ProthesisLevel::tryFrom($this->input('level')),
+            system: ProthesisSystem::tryFrom($this->input('system')),
             color: Color::find($this->input('color_id')),
             name: $this->input('name'),
             slug: Str::of($this->input('name'))->slug('-'),
@@ -116,6 +125,7 @@ class CreateProductRequest extends FormRequest
             made: $this->input('made'),
             manufacturer: $this->input('manufacturer'),
             img: $this->file('img'),
+            grip: ProthesisGrip::tryFrom($this->input('grip')),
             volumeSize: $this->input('volumeSize'),
             lengthSize: $this->input('lengthSize'),
             images: $this->file('imgs'),

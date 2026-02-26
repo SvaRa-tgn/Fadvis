@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\WEB\Profile;
 
+use App\Enum\OrderItemsType;
+use App\Enum\ProthesisGrip;
 use App\Enum\ProthesisSide;
+use App\Enum\ProthesisSize;
+use App\Enum\ProthesisSystem;
 use App\Enum\ProthesisType;
 use App\Http\Controllers\Controller;
-use App\Interfaces\IOrderRepository;
+use App\Interfaces\IProductRepository;
 use App\Models\Order;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\View\View;
-use Random\RandomException;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private readonly IOrderRepository $orderRepository,
+        private readonly IProductRepository $productRepository,
     ) {}
 
     /**
@@ -24,33 +27,13 @@ class OrderController extends Controller
      */
     public function list(User $user): View
     {
-        return view('/app-page/admin/list', ['user' => $user, 'orders' => $user->orders]);
-    }
-
-    /**
-     * @param User $user
-     * @return View
-     */
-    public function create(User $user): View
-    {
         return view(
-            view:'/app-page/profile/order/create-order',
+            view: '/app-page/admin/list',
             data: [
                 'user'     => $user,
+                'orders'   => $user->orders,
                 'patients' => $user->patients,
-                'sides'    => ProthesisSide::getAllSides(),
-                'types'     => ProthesisType::getAllTypes(),
-                ],
-        );
-    }
-
-    public function createItem(User $user, int $id): View
-    {
-
-        return view(
-            view:'/app-page/profile/order/create-order-item',
-            data: [
-                'order' => Order::find($id),
+                'title'    => 'FADVIS: Ваши заказы',
             ],
         );
     }
@@ -60,8 +43,42 @@ class OrderController extends Controller
      * @param Patient $patient
      * @return View
      */
-    public function update(User $user, Patient $patient): View
+    public function create(User $user, Patient $patient): View
     {
-        return view('/app-page/profile/patient/update-patient', ['user' => $user, 'patient' => $patient]);
+        return view(
+            view:'/app-page/profile/order/create-order',
+            data: [
+                'user'     => $user,
+                'patient'  => $patient,
+                'sides'    => ProthesisSide::getAllSides(),
+                'types'    => ProthesisType::getAllTypes(),
+                'sizes'    => ProthesisSize::getAllSizes(),
+                'grips'    => ProthesisGrip::getAllGrip(),
+                'systems'  => ProthesisSystem::getAllSystems(),
+                'products' => $this->productRepository->getActive(),
+                'title'    => 'FADVIS: Создать заказ',
+            ],
+        );
+    }
+
+    /**
+     * @param User $user
+     * @param Order $order
+     * @return View
+     */
+    public function show(User $user, Order $order): View
+    {
+        return view(
+            view: '/app-page/profile/order/order',
+            data: [
+                'order' => $order,
+                'user'  => $user,
+                'leftHand' => $order->orderItems->firstWhere('prothesis', OrderItemsType::LEFT_PROTHESIS_HAND),
+                'rightHand' => $order->orderItems->firstWhere('prothesis', OrderItemsType::RIGHT_PROTHESIS_HAND),
+                'leftWrist' => $order->orderItems->firstWhere('prothesis', OrderItemsType::LEFT_PROTHESIS_WRIST),
+                'rightWrist' => $order->orderItems->firstWhere('prothesis', OrderItemsType::RIGHT_PROTHESIS_WRIST),
+                'title' => 'FADVIS: Заказ № ' . $order->number,
+            ],
+        );
     }
 }

@@ -12,7 +12,20 @@ enum ProthesisSize: string
     case M      = 'M';
     case L      = 'L';
     case XL     = 'XL';
-    case CUSTOM = 'Индивидуальный';
+    case CUSTOM = 'custom';
+
+    public function caption(): string
+    {
+        return match ($this) {
+            self::XXS => 'XXS',
+            self::XS => 'XS',
+            self::S => 'S',
+            self::M => 'M',
+            self::L => 'L',
+            self::XL => 'XL',
+            self::CUSTOM => 'Индивидуальный',
+        };
+    }
 
     public static function values(): array
     {

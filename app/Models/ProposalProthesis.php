@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Enum\AgePeriod;
 use App\Enum\ProposalStatus;
 use App\Enum\ProthesisFunction;
-use App\Enum\ProthesisType;
+use App\Enum\ProthesisLevel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $city
  * @property AgePeriod $age_period
  * @property boolean $is_program
- * @property ProthesisType $prothesis_type
+ * @property ProthesisLevel $prothesis_level
  * @property ProthesisFunction $prothesis_function
  * @property ?string $questions
  * @property ProposalStatus $status
@@ -28,6 +28,12 @@ use Illuminate\Database\Eloquent\Model;
 class ProposalProthesis extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'prothesis_level'    => ProthesisLevel::class,
+        'prothesis_function' => ProthesisFunction::class,
+        'age_period'         => AgePeriod::class,
+    ];
 }
 
 

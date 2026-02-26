@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin\User;
 
 use App\DTO\Admin\User\CreateUserDTO;
 use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
 use App\Exceptions\ErrorException;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -68,12 +69,18 @@ class CreateUserRequest extends FormRequest
         ];
     }
 
-    /** DTO после валидации данных
-     * @throws ErrorException
+    /**
+     * DTO после валидации данных
+     *
+     * @throws BadRequestException
      */
     public function getDto(): CreateUserDTO
     {
-
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
+            );
+        }
 
         $slug = $this->input('surname') . ' ' . $this->input('name'). ' ' . $this->input('patronymic');
 

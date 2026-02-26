@@ -1,9 +1,7 @@
 @include('main-block.head')
 @include('pop-up.auth-pop-up')
-@include('pop-up.notification-box')
-@include('pop-up.change-password')
-@include('pop-up.new-patient')
-@include('pop-up.wait-box')
+@include('app-page.profile.order.prothesis_knot.select_item')
+
 <main>
     @yield('content')
 </main>

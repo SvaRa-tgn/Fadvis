@@ -19,7 +19,12 @@ class UserController extends Controller
     /** @return View */
     public function list(): View
     {
-        return view('/app-page/admin/list', ['users' => $this->userRepository->findByRoleUser()]);
+        return view(
+            view: '/app-page/admin/list',
+            data: [
+                'users' => $this->userRepository->findByRoleUser(),
+                'title' => 'FADVIS: Контрагенты',
+            ]);
     }
 
     /** @return View */
@@ -29,7 +34,8 @@ class UserController extends Controller
             view: '/app-page/admin/user/create-user-form',
             data: [
                 'messengers' => MessengerType::getAllMessenger(),
-                'roles' => UserRoles::getAllRoles(),
+                'roles'      => UserRoles::getAllRoles(),
+                'title'      => 'FADVIS: Создание контрагентов',
             ],
         );
     }
@@ -45,8 +51,9 @@ class UserController extends Controller
             data: [
                 'user' => $user,
                 'messengers' => MessengerType::getAllMessenger(),
-                'roles' => UserRoles::getAllRoles(),
-                'statuses' => Status::getAllStatus(),
+                'roles'      => UserRoles::getAllRoles(),
+                'statuses'   => Status::getAllStatus(),
+                'title'      => 'FADVIS: Редактирование контрагента',
             ],
         );
     }

@@ -3,6 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,5 +48,22 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
+    {
+        if ($e instanceof CreateModelException) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], status: 500);
+        }
+
+        if ($e instanceof BadRequestException) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], status: 400);
+        }
+
+        return parent::render($request, $e);
     }
 }

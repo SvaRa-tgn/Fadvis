@@ -11,9 +11,7 @@ class IndexController extends Controller
 {
     public function __construct(
         private readonly IUserRepository $userRepository,
-    )
-    {
-    }
+    ) {}
 
     public function index(IndexAction $action): View
     {

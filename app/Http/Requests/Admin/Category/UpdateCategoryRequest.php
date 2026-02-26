@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests\Admin\Category;
 
-use App\DTO\Admin\Category\CreateCategoryDTO;
 use App\DTO\Admin\Category\UpdateCategoryDTO;
 use App\Enum\Status;
 use App\Enum\UserRoles;
-use App\Exceptions\ErrorException;
+use App\Exceptions\BadRequestException;
 use App\Models\Category;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class UpdateCategoryRequest extends FormRequest
 {
@@ -30,12 +30,13 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'              => ['nullable', 'string', 'unique:categories', 'max:50', 'cyrillic'],
-            'second_name'       => ['nullable', 'string', 'unique:categories', 'max:100', 'cyrillic'],
-            'description_index' => ['nullable', 'string', 'max:500'],
-            'description_page'  => ['nullable', 'string', 'max:2000'],
+            'name'              => ['nullable', 'string', Rule::unique('categories', 'name')
+                ->ignore($this->route('category')), 'max:50', 'cyrillic'],
+            'second_name'       => ['nullable', 'string', Rule::unique('categories', 'second_name')
+                ->ignore($this->route('category')), 'max:100'],
+            'description'       => ['nullable', 'string', 'max:3000'],
             'status'            => ['nullable', 'string', 'max:15'],
-            'img'               => ['nullable', 'image', 'max:2048'],
+            'img'               => ['nullable', 'image', 'max:4200'],
         ];
     }
 
@@ -43,38 +44,37 @@ class UpdateCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.cyrillic'              => 'Название должно состоять из русских букв',
-            'name.max'                   => 'Название не должно превышать 50 символов',
-            'name.unique'                => 'Такое название уже есть',
-            'second_name.cyrillic'       => 'Название категории должно состоять из русских букв',
-            'second_name.max'            => 'Название категории не должно превышать 100 символов',
-            'second_name.unique'         => 'Такое название уже есть',
-            'description_index.max'      => 'Описание не должно превышать 2000 символов',
-            'description_page.max'       => 'Описание не должно превышать 500 символов',
-            'status.max'                 => 'Описание не должно превышать 15 символов',
-            'img.max'                    => 'Фотография  слишком большого размера',
+            'name.cyrillic'        => 'Название должно состоять из русских букв',
+            'name.max'             => 'Название не должно превышать 50 символов',
+            'name.unique'          => 'Такое название уже есть',
+            'second_name.max'      => 'Название категории не должно превышать 100 символов',
+            'second_name.unique'   => 'Такое название уже есть',
+            'description.max'      => 'Описание не должно превышать 1000 символов',
+            'status.max'           => 'Описание не должно превышать 15 символов',
+            'img.max'              => 'Фотография должна быть не более 4мб',
         ];
     }
 
-    /** DTO после валидации данных
-     * @throws ErrorException
+    /**
+     * DTO после валидации данных
+     *
+     * @throws BadRequestException
      */
     public function getDto(): UpdateCategoryDTO
     {
-        if ($this->user()->role !== UserRoles::MASTER->value) {
-            throw new ErrorException(
-                message: 'Страница не найдена',
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
             );
         }
 
         return new UpdateCategoryDTO(
-            category: Category::find($this->route('id')),
+            category: Category::findOrFail($this->route('category')),
             status: Status::tryFrom($this->input('status')),
             name: $this->input('name'),
             slug: Str::of($this->input('name'))->slug('-'),
             second_name: $this->input('second_name'),
-            description_index: $this->input('description_index'),
-            description_page: $this->input('description_page'),
+            description: $this->input('description'),
             img: $this->file('img'),
         );
     }

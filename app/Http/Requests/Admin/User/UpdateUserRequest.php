@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -30,8 +31,10 @@ class UpdateUserRequest extends FormRequest
             'name'         => ['nullable', 'string', 'max:50', 'cyrillic'],
             'surname'      => ['nullable', 'string', 'max:50', 'cyrillic'],
             'patronymic'   => ['nullable', 'string', 'max:50', 'cyrillic'],
-            'email'        => ['nullable', 'unique:users', 'email', 'max:50'],
-            'phone'        => ['nullable', 'unique:users', 'string', 'phone'],
+            'email'        => ['nullable', Rule::unique('users', 'email')
+                ->ignore($this->route('user')), 'email', 'max:50'],
+            'phone'        => ['nullable', Rule::unique('users', 'phone')
+                ->ignore($this->route('user')), 'string', 'phone'],
             'messenger'    => ['nullable', 'string', 'max:10'],
             'site'         => ['nullable', 'string', 'max:50'],
             'organization' => ['nullable', 'string', 'max:50'],
@@ -69,7 +72,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function getDto(): UpdateUserDTO
     {
-        if ($this->user()->role !== UserRoles::MASTER->value) {
+        if ($this->user()->role !== UserRoles::MASTER) {
             throw new ErrorException(
                 message: 'Страница не найдена',
             );
@@ -84,7 +87,7 @@ class UpdateUserRequest extends FormRequest
         }
 
         return new UpdateUserDTO(
-            user: User::find($this->route('id')),
+            user: User::findOrFail($this->route('user')),
             role: UserRoles::tryFrom($this->input('role')),
             status: Status::tryFrom($this->input('status')),
             route: request()->url(),
@@ -100,7 +103,6 @@ class UpdateUserRequest extends FormRequest
             site: $this->input('site'),
             inn: $this->input('inn'),
             ogrn: $this->input('ogrn'),
-            password: Hash::make($this->input('password')),
         );
     }
 }

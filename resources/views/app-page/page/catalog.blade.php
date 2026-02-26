@@ -1,28 +1,26 @@
 @extends('/index')
 @section('content')
-    <div class="main-content">
-        <section class="form-wrap">
-            <div class="catalog-title">
-                Каталог
-            </div>
-            <section class="catalog-grid">
-                <ul class="catalog-grid-list">
-                    @foreach($categories as $category)
-                        <li class="content-grid-item">
-                            <a class="catalog-box-link" href="{{route('show.category', $category->id)}}">
-                                <div class="content-img-back-wrap">
-                                    <img class="content-grid-img" src="{{asset($category->link)}}" alt="fadvis">
+    <div class="main-content for-phone">
+        <div class="page-title">
+            Каталог
+        </div>
+        <section class="main-content-bottom">
+            <ul class="catalog-list position-column-3">
+                @foreach($categories as $category)
+                    <li class="catalog-item index-page">
+                        <a class="wrap-catalog-item" href="{{route('show.category', $category['slug'])}}">
+                            <img class="item-img" src="{{asset($category['link'])}}" alt="Fadvis">
+                            <div class="filter for-catalog">
+                                <div class="filter-box">
+                                    <article class="filter-article">
+                                        {{$category['name']}}
+                                    </article>
                                 </div>
-                                <div class="filter-catalog left-content ">
-                                    <div class="filter-item-catalog">
-                                        <div class="catalog-link catalog-link-center">{{$category->name}}</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </section>
+                            </div>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </section>
     </div>
 @endsection

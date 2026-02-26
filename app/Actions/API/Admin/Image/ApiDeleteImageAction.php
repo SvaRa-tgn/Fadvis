@@ -2,20 +2,18 @@
 
 namespace App\Actions\API\Admin\Image;
 
-use App\DTO\Admin\Product\UpdateProductDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
-use App\Enum\StoragePath;
-use App\Http\Resources\ProductResource;
+use App\Exceptions\CreateModelException;
 use App\Interfaces\IImageRepository;
 use App\Interfaces\IProductImageRepository;
-use App\Interfaces\IProductRepository;
 use App\Models\Image;
 use App\Service\StorageService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiDeleteImageAction
 {
@@ -24,11 +22,17 @@ class ApiDeleteImageAction
         private readonly IImageRepository $imageRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param Image $image
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(Image $image): JsonResponse
     {
         try {
             DB::beginTransaction();
+            $product = $image->productImage->product;
+
             $this->productImageRepository->delete($image->productImage);
 
             StorageService::deleteImage($image->path);
@@ -38,7 +42,7 @@ class ApiDeleteImageAction
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
+            throw new CreateModelException(
                 message: ErrorType::ERROR_INFO->caption(),
             );
         }
@@ -46,8 +50,8 @@ class ApiDeleteImageAction
         return new JsonResponse(
             data: [
                 'message' => [
-                    'title'   => PopUpContent::IMAGE_DELETE_SUCCESS->caption(),
-                    'message' => PopUpContent::IMAGE_DELETE_SUCCESS_INFO->caption(),
+                    'message' => PopUpContent::IMAGE_DELETE_SUCCESS->caption(),
+                    'link'    => route('admin.product.update', $product),
                 ],
             ],
             status: Response::HTTP_ACCEPTED,

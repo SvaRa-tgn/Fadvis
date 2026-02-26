@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Admin\User;
 
-use App\DTO\Admin\User\ChangePasswordUserDTO;
 use App\DTO\Admin\User\UpdateUserDTO;
+use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
+use App\Exceptions\ErrorException;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +28,8 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'current_password'  => ['required', 'string'],
-            'password'          => ['required', 'string', 'min:8', 'confirmed'],
+            'current_password' => ['required', 'string'],
+            'password'         => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 
@@ -35,26 +37,46 @@ class ChangePasswordRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'password.min'        => 'Пароль должен состоять минимум из 8 символов',
-            'password.confirmed'  => 'Пароли не совпадают',
+            'password.min'       => 'Пароль должен состоять минимум из 8 символов',
+            'password.confirmed' => 'Пароли не совпадают',
         ];
     }
 
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            if (!Hash::check($this->input('current_password'), User::find($this->route('id'))->password)) {
+            if (!Hash::check($this->input('current_password'), User::find($this->route('user'))->password)) {
                 $validator->errors()->add('current_password', 'Не правильный пароль');
             }
         });
     }
 
-    /** DTO после валидации данных */
+    /**
+     * DTO после валидации данных
+     *
+     * @throws ErrorException
+     * @throws BadRequestException
+     */
     public function getDto(): UpdateUserDTO
     {
+        if ($this->user()->role !== UserRoles::MASTER && $this->user()->role !== UserRoles::USER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
+            );
+        }
+
+        $user = User::findOrFail($this->route('user'));
+
+        if (!$this->user()->is($user)) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
+            );
+        }
+
         return new UpdateUserDTO(
-            user: User::find($this->route('id')),
+            user: $user,
             password: $this->input('password'),
+            current_password: $this->input('current_password'),
         );
     }
 }

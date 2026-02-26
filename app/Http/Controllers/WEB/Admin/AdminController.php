@@ -12,7 +12,10 @@ class AdminController extends Controller
     /** @return View */
     public function show(): View
     {
-        return view('/app-page/admin/user/private-admin', ['user' => Auth::user()]);
+        return view('/app-page/admin/user/private-admin', [
+            'user'  => Auth::user(),
+            'title' => 'FADVIS: Админка - Профиль.',
+        ]);
     }
 
     /** @return View */
@@ -21,8 +24,9 @@ class AdminController extends Controller
         return view(
             view:'/app-page/admin/update-private-admin',
             data: [
-                'user' => Auth::user(),
+                'user'       => Auth::user(),
                 'messengers' => MessengerType::getAllMessenger(),
+                'title'      => 'FADVIS: Админка - Редактирование профиля.',
             ],
         );
     }

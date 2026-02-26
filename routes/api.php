@@ -6,9 +6,9 @@ use App\Http\Controllers\API\Admin\Product\ApiImageController;
 use App\Http\Controllers\API\Admin\Product\ApiProductController;
 use App\Http\Controllers\API\Admin\User\ApiUserController;
 use App\Http\Controllers\API\Page\ApiPageController;
-use App\Http\Controllers\API\Profile\ApiOrderController;
+use App\Http\Controllers\API\Pdf\ApiPdfController;
 use App\Http\Controllers\API\Profile\ApiPatientController;
-use App\Http\Controllers\API\RegistrationMaster\ApiRegistrationMasterController;
+use App\Http\Controllers\API\Profile\Order\ApiOrderController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,11 +22,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::prefix('/v1/master')->group(function () {
-   Route::post('/create', [ApiRegistrationMasterController::class, 'create'])->name('api.v1.master.create');
-});
-
 Route::post(
     uri: '/new-password',
     action: [NewPasswordController::class, 'newPassword'],
@@ -34,28 +29,28 @@ Route::post(
 
 Route::prefix('/v1/admin')->middleware('auth:sanctum')->group(function () {
     Route::prefix('/master')->group(function () {
-        Route::put('/update/{id}', [ApiUserController::class, 'update'])->name('api.v1.admin.update');
+        Route::put('/update/{user}', [ApiUserController::class, 'update'])->name('api.v1.admin.update');
     });
 
     Route::prefix('/user')->group(function () {
         Route::post('/create', [ApiUserController::class, 'create'])->name('api.v1.user.create');
-        Route::patch('/update/{id}', [ApiUserController::class, 'update'])->name('api.v1.user.update');
-        Route::put('/change-password/{id}', [ApiUserController::class, 'changePassword'])->name('api.v1.user.changePassword');
+        Route::patch('/update/{user}', [ApiUserController::class, 'update'])->name('api.v1.user.update');
+        Route::put('/change-password/{user}', [ApiUserController::class, 'changePassword'])->name('api.v1.user.changePassword');
     });
 
     Route::prefix('/category')->group(function () {
         Route::post('/create', [ApiCategoryController::class, 'create'])->name('api.v1.category.create');
-        Route::patch('/update/{id}', [ApiCategoryController::class, 'update'])->name('api.v1.category.update');
+        Route::patch('/update/{category}', [ApiCategoryController::class, 'update'])->name('api.v1.category.update');
     });
 
     Route::prefix('/color')->group(function () {
         Route::post('/create', [ApiColorController::class, 'create'])->name('api.v1.color.create');
-        Route::patch('/update/{id}', [ApiColorController::class, 'update'])->name('api.v1.color.update');
+        Route::patch('/update/{color}', [ApiColorController::class, 'update'])->name('api.v1.color.update');
     });
 
     Route::prefix('/product')->group(function () {
         Route::post('/create', [ApiProductController::class, 'create'])->name('api.v1.product.create');
-        Route::patch('/update/{id}', [ApiProductController::class, 'update'])->name('api.v1.product.update');
+        Route::patch('/update/{product}', [ApiProductController::class, 'update'])->name('api.v1.product.update');
         Route::post('/image/add/{product}', [ApiImageController::class, 'add'])->name('api.v1.image.add');
         Route::patch('/image/update/{product}/{image}', [ApiImageController::class, 'update'])->name('api.v1.image.update');
         Route::delete('/image/delete/{image}', [ApiImageController::class, 'delete'])->name('api.v1.image.delete');
@@ -70,10 +65,13 @@ Route::prefix('/v1/profile')->middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('{user}')->group(function () {
-        Route::post('/order/create', [ApiOrderController::class, 'create'])->name('api.v1.order.create');
-        Route::post('/order/create/{id}', [ApiOrderController::class, 'createItem'])->name('api.v1.order.createItem');
-        Route::patch('/order/update/{order}', [ApiOrderController::class, 'update'])->name('api.v1.order.update');
+        Route::post('/order/{patient}/create', [ApiOrderController::class, 'create'])->name('api.v1.order.create');
     });
+});
+
+Route::prefix('/v1/pdf')->middleware('auth:sanctum')->group(function () {
+    Route::get('/{order}/download', [ApiPdfController::class, 'download'])->name('api.v1.order.pdf.download');
+    Route::post('/{order}/resend', [ApiPdfController::class, 'resend'])->name('api.v1.order.pdf.resend');
 });
 
 Route::prefix('/v1/page')->group(function () {

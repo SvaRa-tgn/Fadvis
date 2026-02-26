@@ -12,7 +12,7 @@ readonly class UpdateUserDTO
         public User       $user,
         public ?UserRoles $role = null,
         public ?Status    $status = null,
-        public ?string    $route =null,
+        public ?string    $route = null,
         public ?string    $name = null,
         public ?string    $surname = null,
         public ?string    $patronymic = null,
@@ -23,8 +23,9 @@ readonly class UpdateUserDTO
         public ?string    $organization = null,
         public ?string    $address = null,
         public ?string    $site = null,
-        public ?string        $inn = null,
-        public ?string        $ogrn = null,
-        public ?string        $password = null,
+        public ?string    $inn = null,
+        public ?string    $ogrn = null,
+        public ?string    $password = null,
+        public ?string    $current_password = null,
     ) {}
 }

@@ -8,8 +8,7 @@ readonly class CreateCategoryDTO
         public string  $name,
         public string  $slug,
         public string  $second_name,
-        public string  $description_index,
-        public string  $description_page,
+        public string  $description,
         public string  $img,
     ) {}
 }

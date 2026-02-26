@@ -3,18 +3,22 @@
 namespace App\Http\Requests\Admin\Product;
 
 use App\DTO\Admin\Product\UpdateProductDTO;
+use App\Enum\ProthesisGrip;
 use App\Enum\ProthesisLevel;
+use App\Enum\ProthesisSystem;
 use App\Enum\Status;
 use App\Enum\ProthesisSide;
 use App\Enum\ProthesisSize;
 use App\Enum\ProthesisType;
 use App\Enum\UserRoles;
+use App\Exceptions\BadRequestException;
 use App\Exceptions\ErrorException;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -33,9 +37,13 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $product = Product::where('slug', $this->route('product'))->first();
+
         return [
-            'name'            => ['nullable', 'string', 'unique:products', 'max:255'],
-            'article'         => ['nullable', 'string', 'unique:products', 'max:50'],
+            'name'            => ['nullable', 'string', Rule::unique('products', 'name')
+                ->ignore($product->id), 'max:255'],
+            'article'         => ['nullable', 'string', Rule::unique('products', 'article')
+                ->ignore($product->id), 'max:50'],
             'category_id'     => ['nullable', 'int'],
             'status'          => ['nullable', 'string', 'max:20'],
             'type'            => ['nullable', 'string', 'max:20'],
@@ -47,6 +55,8 @@ class UpdateProductRequest extends FormRequest
             'length_size'     => ['nullable', 'string', 'max:30'],
             'color_id'        => ['nullable', 'int'],
             'is_select_color' => ['nullable', 'string'],
+            'grid'            => ['nullable', 'string'],
+            'system'          => ['nullable', 'string'],
             'price'           => ['nullable', 'numeric'],
             'made'            => ['nullable', 'string', 'max:15'],
             'manufacturer'    => ['nullable', 'string', 'max:50'],
@@ -74,29 +84,33 @@ class UpdateProductRequest extends FormRequest
             'made.max'                 => 'Страна производства не должна превышать 20 символов',
             'manufacturer.max'         => 'Производитель должен не превышать 20 символов',
             'img.max'                  => 'Фотография  слишком большого размера',
-            'image.max'                  => 'Фотография  слишком большого размера',
+            'image.max'                => 'Фотография  слишком большого размера',
         ];
     }
 
-    /** DTO после валидации данных
-     * @throws ErrorException
+    /**
+     * DTO после валидации данных
+     *
+     * @throws BadRequestException
      */
     public function getDto(): UpdateProductDTO
     {
-        if ($this->user()->role !== UserRoles::MASTER->value) {
-            throw new ErrorException(
-                message: 'Страница не найдена',
+        if ($this->user()->role !== UserRoles::MASTER) {
+            throw new BadRequestException(
+                message: 'Возникла ошибка',
             );
         }
 
         return new UpdateProductDTO(
-            product: Product::find($this->route('id')),
+            product:Product::where('slug', $this->route('product'))->firstOrFail(),
             category: Category::find($this->input('category_id')),
             status: Status::tryFrom($this->input('status')),
             type: ProthesisType::tryFrom($this->input('type')),
             size: ProthesisSize::tryFrom($this->input('size')),
             side: ProthesisSide::tryFrom($this->input('size')),
             level: ProthesisLevel::tryFrom($this->input('level')),
+            system: ProthesisSystem::tryFrom($this->input('system')),
+            grip: ProthesisGrip::tryFrom($this->input('grip')),
             color: Color::find($this->input('color_id')),
             name: $this->input('name'),
             slug: Str::of($this->input('name'))->slug('-'),

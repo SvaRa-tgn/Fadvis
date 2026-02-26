@@ -503,31 +503,7 @@
   margin-bottom: 3dvh;
 }
 
-.create-box {
-  display: -ms-grid;
-  display: grid;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: start;
-}
 
-.create-box-link {
-  padding: 1dvh;
-  text-transform: uppercase;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  color: darkgreen;
-  border: 1px solid darkgreen;
-  font-size: 1.3em;
-}
-
-.create-box-link:hover {
-  background: darkgreen;
-  color: white;
-}
 
 .admin-img-box-list {
   width: 100%;

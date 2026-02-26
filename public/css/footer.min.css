@@ -18,8 +18,8 @@
   padding: 5dvh 0 5dvh;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 2fr;
-  grid-template-columns: 1fr 2fr;
+  -ms-grid-columns: 1fr 3fr;
+  grid-template-columns: 1fr 3fr;
 }
 
 .footer-logo {
@@ -27,13 +27,17 @@
 }
 
 .social-list {
-  text-align: left;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[4];
+  grid-template-columns: repeat(4, 1fr);
   margin: 2vh 0;
 }
 
 .social-item {
   display: inline-block;
   padding: 2vh;
+  text-align: center;
 }
 
 .social-link {

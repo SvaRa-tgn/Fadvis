@@ -1,15 +1,15 @@
 @extends('page.admin-page')
 @section('admin-content')
 <main class="main">
-    <div class="main-content">
-        <section class="form-wrap">
-            <div class="form-title-box">
-                <a class="link-title" href="{{route('admin.product.list')}}">Назад</a>
-                <div class="title-box">
-                    Создание товара
+    <div class="admin">
+        <section class="wrap-user-data-profile user-data">
+            <div class="admin-title">
+                <div class="admin-title-page">
+                    Создать категорию
                 </div>
             </div>
-            <form class="form-admin js-response" method="POST" action="{{ route('api.v1.product.create') }}" enctype="multipart/form-data">
+
+            <form class="js-response" data-form="js-create" method="POST" action="{{ route('api.v1.product.create') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-block form-block-alt">
                     <div class="input-wrap nameError" data-notification="Вывод ошибки">
@@ -52,7 +52,7 @@
                         <label class="input-label" for="side">*Сторона протезирования</label>
                         <select class="input" name="side" id="side">
                             @foreach($sides as $side)
-                                <option value="{{$side->value}}">{{$side->caption()}}</option>
+                                <option value="{{$side->value}}">{{$side->captionSide()}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -68,18 +68,37 @@
 
                     <div class="input-wrap hand levelError">
                         <label class="input-label" for="level">*Узел протеза</label>
-                        <select class="input" name="level" id="level">
+                        <select class="input" id="level">
                             @foreach($hand_levels as $hand_level)
                                 <option value="{{$hand_level->value}}">{{$hand_level->caption()}}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <div class="input-wrap wrist hide non-actual levelError">
+                    <div class="input-wrap wrist hide levelError">
                         <label class="input-label" for="level2">*Узел протеза</label>
-                        <select class="input" name="level" id="level2">
+                        <select class="input" id="level2">
                             @foreach($wrist_levels as $wrist_level)
                                 <option value="{{$wrist_level->value}}">{{$wrist_level->caption()}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="input-wrap gripError">
+                        <label class="input-label" for="grip">*Тип соединения</label>
+                        <select class="input" name="grip" id="grip">
+                            <option value="">Нет коллекции</option>
+                            @foreach($grip as $item)
+                                <option value="{{$item->value}}">{{$item->caption()}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="input-wrap systemError">
+                        <label class="input-label" for="system">*Система протеза</label>
+                        <select class="input" name="system" id="system">
+                            @foreach($systems as $system)
+                                <option value="{{$system->value}}">{{$system->caption()}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -88,7 +107,7 @@
                         <label class="input-label" for="size">*Размер</label>
                         <select class="input" name="size" id="size">
                             @foreach($sizes as $size)
-                                <option value="{{$size->value}}">{{$size->value}}</option>
+                                <option value="{{$size->value}}">{{$size->caption()}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -146,18 +165,24 @@
                     </div>
                 </div>
 
-                <div class="button-box">
-                    <a class="user-data-edit red-color password-switch " href="{{route('admin.product.list')}}">Назад</a>
-
-                    <div class="wrap-button js-button ">
-                        <button class="user-data-edit green-color">Создать</button>
+                <div class="regular-button position-column-2-2">
+                    <div class="button-box">
+                        <a class="button-link red-color" href="{{route('admin.product.list')}}">
+                            Отменить
+                        </a>
                     </div>
 
-                    <div class="wrap-update-button js-preloader hide">
-                        <div class="wrap-spin ">
-                            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                    <div class="button-box">
+                        <button class="button-link js-button green-color">
+                            Создать
+                        </button>
+
+                        <div class="await-response js-preloader hide">
+                            <div class="wrap-spin ">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </div>
+                            <article>Обработка</article>
                         </div>
-                        <article>Обработка</article>
                     </div>
                 </div>
             </form>

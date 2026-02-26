@@ -5,6 +5,7 @@ namespace App\Actions;
 use App\Enum\Status;
 use App\Interfaces\ICategoryRepository;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class IndexAction
@@ -26,10 +27,15 @@ class IndexAction
                 'id'           => $category->id,
                 'name'         => $category->name,
                 'link'         => $category->link,
-                'descriptions' => explode("\r\n", $category->description_index),
+                'slug'         => $category->slug,
+                'descriptions' => explode("\r\n", $category->description),
             ];
         }
 
-        return view('/app-page/index/index-content', ['catalogs' => $catalogs]);
+        return view('/app-page/index/index-content', [
+            'user'     => Auth::check() ? Auth::user() : null,
+            'catalogs' => $catalogs,
+            'title'    => 'FADVIS: Изготовление протезов. Протезы для рук и кистей. Протезы активные и пассивные.'
+        ]);
     }
 }

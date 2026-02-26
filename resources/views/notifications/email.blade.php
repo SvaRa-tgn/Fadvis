@@ -25,19 +25,22 @@
     };
 ?>
 <x-mail::button :url="$actionUrl" :color="$color">
-{{ $actionText }}
+   {{ $actionText }}
 </x-mail::button>
 @endisset
 
 {{-- Outro Lines --}}
+@isset($outroLines)
 @foreach ($outroLines as $line)
 {{ $line }}
 
 @endforeach
+@endisset
 
 {{-- Salutation --}}
 @if (! empty($salutation))
 {{ $salutation }}
+
 @else
 @lang('Regards'),<br>
 {{ config('app.name') }}

@@ -1,103 +1,173 @@
 @extends('page.admin-page')
 @section('admin-content')
     <main class="main">
-        <div class="main-content">
-            <section class="form-wrap">
-                <div class="form-title-box">
-                    <a class="link-title" href="{{route('profile.order.list', $user)}}">Назад</a>
-                    <div class="title-box">
-                        Создание заказа
+        <section class="admin">
+            <div class="wrap-user-data-profile user-data">
+                <div class="admin-title">
+                    <div class="admin-title-page">
+                        Новый заказ
                     </div>
                 </div>
-                <form class="form-admin js-response" method="POST" action="{{route('api.v1.order.create', ['user' => $user])}}" enctype="multipart/form-data">
+
+                <form class="js-response" method="POST" data-form="js-create"
+                      action="{{ route('api.v1.order.create', ['user' => $user, 'patient' => $patient]) }}"
+                      enctype="multipart/form-data">
                     @csrf
-                    <div class="order-data-profile">
-                        <article class="title-data-profile">Данные заказа</article>
+                    <div class="order-info">
+                        <div class="wrap-order-block">
+                            <div class="user-data-profile position-row-fr-auto">
+                                <div class="order-title">
+                                    Пациент
+                                </div>
 
-                        <div class="input-order">
-                            <label class="input-label" for="patient-order">*Выберите пациента</label>
-                            <select class="input" name="patient" id="patient-order">
-                                    <option value="">-- Выберите пациента --</option>
-                                    @if (!$patients->isEmpty())
-                                        @foreach($patients as $patient)
-                                            <option
-                                                value="{{$patient->id}}">{{$patient->surname . ' ' . $patient->name .  ' ' . $patient->patronymic}}</option>
-                                        @endforeach
-                                    @endif
-                            </select>
-                        </div>
-
-                        <div class="input-order position-order">
-                            <article class="select-patient">Не нашли пациента?</article>
-                            <div class="create-patient js-new-patient">
-                                Создайте
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="order-data-profile side-box">
-                        <div class="input-order">
-                            <article class="select-value">Выберите сторону протезирования</article>
-
-                            <div class="select-value-block pos-3">
-                                @foreach($sides as $side)
-                                    <div class="wrap-radio">
-                                        <label class="radio-label">
-                                            @if ($side === \App\Enum\ProthesisSide::UNIVERSAL)
-                                                Левая и правая
-                                                <input class="checkbox side-order" name="side" value="{{$side->value}}" type="radio"/>
-                                            @else
-                                                {{$side->captionSide()}}
-                                                <input class="checkbox side-order" name="side" value="{{$side->value}}" type="radio"/>
-                                            @endif
-
-                                        </label>
+                                <div class="wrap-order-body js-data-patient" data-patient="{{$patient}}">
+                                    <div class="order-body">
+                                        <ul class="order-patient-list">
+                                            <li class="order-patient-item">
+                                                ФИО:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->surname . ' ' . $patient->name . ' ' . $patient->patronymic}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Пол:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->gender->caption()}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Дата рождения:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->birth_date->format('d.m.Y')}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Телефон:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->phone}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Мессенджер:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->messenger}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                email:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->email}}
+                                            </li>
+                                        </ul>
                                     </div>
-                                @endforeach
+
+                                    <div class="order-body">
+                                        <ul class="order-patient-list">
+                                            <li class="order-patient-item">
+                                                Левая сторона:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->left_type ? $patient->left_type->caption() : 'Не требуется'}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Протезирование:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->left_level ? $patient->left_level->caption() : 'Не требуется'}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Правая сторона:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->right_type ? $patient->right_type->caption() : 'Не требуется'}}
+                                            </li>
+                                            <li class="order-patient-item">
+                                                Протезирование:
+                                            </li>
+                                            <li class="order-patient-item">
+                                                {{$patient->right_level ? $patient->right_level->caption() : 'Не требуется'}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <a class="button-link red-color" href="#">
+                                        Выбрать другого пациента
+                                    </a>
+
+                                    <a class="button-link green-color" href="#">
+                                        Редактировать пациента
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="order-data-profile left-type-box hide">
-                        <div class="input-order">
-                            <label class="input-label" for="left-side">*Выберите тип протезирования для левой руки</label>
-                            <select class="input" name="left_type" id="left-side">
-                                <option value="">-- Выберите тип протеза --</option>
-                                @foreach($types as $type)
-                                    <option value="{{$type->value}}">{{$type->caption()}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                        <section class="order-block" data-products="{{$products}}">
+                            <ul class="order-block-list">
+                                @if ($patient->left_type === \App\Enum\ProthesisType::PROTHESIS_HAND)
+                                    <li class="order-block-item">
+                                        @include('app-page.profile.order.select_prothesis_item.prothesis_left_hand')
+                                    </li>
+                                @endif
 
-                    <div class="order-data-profile right-type-box hide">
-                        <div class="input-order">
-                            <label class="input-label" for="right-side">*Выберите тип протезирования для правой руки</label>
-                            <select class="input" name="right_type" id="right-side">
-                                <option value="">-- Выберите тип протеза --</option>
-                                @foreach($types as $type)
-                                    <option value="{{$type->value}}">{{$type->caption()}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                                @if ($patient->right_type === \App\Enum\ProthesisType::PROTHESIS_HAND)
+                                    <li class="order-block-item">
+                                        @include('app-page.profile.order.select_prothesis_item.prothesis_right_hand')
+                                    </li>
+                                @endif
 
-                    <div class="button-box">
-                        <a class="user-data-edit red-color password-switch " href="{{route('profile.order.list', $user)}}">Назад</a>
+                                @if ($patient->left_type === \App\Enum\ProthesisType::PROTHESIS_WRIST)
+                                    <li class="order-block-item">
+                                        @include('app-page.profile.order.select_prothesis_item.prothesis_left_wrist')
+                                    </li>
+                                @endif
 
-                        <div class="wrap-button js-button ">
-                            <button class="user-data-edit green-color">Выбрать комплектующие</button>
-                        </div>
+                                @if ($patient->right_type === \App\Enum\ProthesisType::PROTHESIS_WRIST)
+                                    <li class="order-block-item">
+                                        @include('app-page.profile.order.select_prothesis_item.prothesis_right_wrist')
+                                    </li>
+                                @endif
 
-                        <div class="wrap-update-button js-preloader hide">
-                            <div class="wrap-spin ">
-                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                <li class="order-block-item ">
+                                    @include('app-page.profile.order.select_prothesis_item.order-item')
+                                </li>
+
+                                <li class="order-block-item">
+                                    <div class="order-title js-slide-box">
+                                        Комментарий к заказу <i class="fa fa-arrow-right arrow" aria-hidden="true"></i>
+                                    </div>
+
+                                    <div class="user-data-profile js-box-close hide">
+                                        <div class="wrap-text-area">
+                                            <textarea class="input text-area" name="description"
+                                                      id="description"></textarea>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </section>
+
+                        <div class="button-box regular-button ">
+                            <a class="button-link red-color" href="#">
+                                Отменить
+                            </a>
+                            <button class="button-link create-order green-color hide js-button">
+                                Создать заказ
+                            </button>
+                            <div class="button-link create-order-disabled disabled">
+                                Создать заказ
                             </div>
-                            <article>Обработка</article>
+
+                            <div class="await-response js-preloader hide">
+                                <div class="wrap-spin ">
+                                    <i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+                                </div>
+                                <article>Обработка</article>
+                            </div>
                         </div>
                     </div>
                 </form>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 @endsection

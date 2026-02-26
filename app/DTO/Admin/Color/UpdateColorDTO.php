@@ -10,6 +10,7 @@ readonly class UpdateColorDTO
     public function __construct(
         public Color   $color,
         public ?Status $status = null,
+        public ?string $slug = null,
         public ?string $name = null,
         public ?string $article = null,
         public ?string $img = null,

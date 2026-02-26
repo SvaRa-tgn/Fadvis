@@ -6,6 +6,7 @@ use App\DTO\Profile\Patient\CreatePatientDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
 use App\Enum\StoragePath;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\PatientResource;
 use App\Interfaces\IImageRepository;
 use App\Interfaces\IPatientImageRepository;
@@ -16,6 +17,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiCreatePatientAction
 {
@@ -25,7 +27,12 @@ class ApiCreatePatientAction
         private readonly IPatientImageRepository $patientImageRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param CreatePatientDTO $dto
+     * @param User $user
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(CreatePatientDTO $dto, User $user): JsonResponse
     {
         try {
@@ -33,18 +40,20 @@ class ApiCreatePatientAction
             $patient = $this->patientRepository->create($dto, $user);
 
             foreach ($dto->img as $img) {
-                $image = $this->imageRepository->create(
-                    StorageService::updateImage(StoragePath::IMAGE_STORAGE->value, $img),
-                );
+                if ($img !== null) {
+                    $image = $this->imageRepository->create(
+                        StorageService::updateImage(StoragePath::IMAGE_STORAGE->value, $img),
+                    );
 
-                $this->patientImageRepository->create($patient, $image);
+                    $this->patientImageRepository->create($patient, $image);
+                }
             }
 
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
-                message: ErrorType::ERROR_INFO->caption() . $e->getMessage(),
+            throw new CreateModelException(
+                message: ErrorType::ERROR_INFO->caption(),
             );
         }
 
@@ -52,9 +61,8 @@ class ApiCreatePatientAction
             data: [
                 'data'    => new PatientResource($patient),
                 'message' => [
-                    'title'   => PopUpContent::PATIENT_CREATE_SUCCESS->caption(),
-                    'message' => PopUpContent::PATIENT_CREATE_SUCCESS_INFO->caption(),
-                    'route'   => route('profile.patient.list', $user->id),
+                    'message' => PopUpContent::PATIENT_CREATE_SUCCESS->caption(),
+                    'link'    => route('profile.patient.list', $user->id),
                 ],
             ],
             status: Response::HTTP_CREATED,

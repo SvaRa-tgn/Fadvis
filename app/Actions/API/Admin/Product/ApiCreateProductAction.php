@@ -6,6 +6,7 @@ use App\DTO\Admin\Product\CreateProductDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
 use App\Enum\StoragePath;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\ProductResource;
 use App\Interfaces\IImageRepository;
 use App\Interfaces\IProductImageRepository;
@@ -15,6 +16,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiCreateProductAction
 {
@@ -24,7 +26,11 @@ class ApiCreateProductAction
         private readonly IImageRepository $imageRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param CreateProductDTO $dto
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(CreateProductDTO $dto): JsonResponse
     {
         try {
@@ -34,20 +40,23 @@ class ApiCreateProductAction
                 image: StorageService::updateImage(StoragePath::PRODUCT_STORAGE->value, $dto->img),
             );
 
-            foreach ($dto->images as $image) {
-                $image = $this->imageRepository->create(
-                    img: StorageService::updateImage(StoragePath::IMAGE_STORAGE->value, $image),
-                );
+            if ($dto->images !== null) {
+                foreach ($dto->images as $image) {
+                    $image = $this->imageRepository->create(
+                        img: StorageService::updateImage(StoragePath::IMAGE_STORAGE->value, $image),
+                    );
 
-                $this->productImageRepository->create(
-                    product: $product,
-                    image: $image,
-                );
+                    $this->productImageRepository->create(
+                        product: $product,
+                        image: $image,
+                    );
+                }
             }
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
+            throw new CreateModelException(
                 message: ErrorType::ERROR_INFO->caption() . $e->getMessage(),
             );
         }
@@ -56,9 +65,8 @@ class ApiCreateProductAction
             data: [
                 'data'    => new ProductResource($product),
                 'message' => [
-                    'title'   => PopUpContent::PRODUCT_CREATE_SUCCESS->caption(),
-                    'message' => PopUpContent::PRODUCT_CREATE_SUCCESS_INFO->caption(),
-                    'route'   => route('admin.product.list'),
+                    'message' => PopUpContent::PRODUCT_CREATE_SUCCESS->caption(),
+                    'link'    => route('admin.product.list'),
                 ],
             ],
             status: Response::HTTP_CREATED,

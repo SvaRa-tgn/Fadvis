@@ -2,27 +2,35 @@
 
 namespace App\Models;
 
-use App\Enum\ProthesisLevel;
+use App\Enum\ProthesisSide;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- * @property int $order_id
+ * @property int $order_items_id
  * @property int $product_id
- * @property int $quantity
- * @property int $amount
- * @property int $total_amount
- * @property ProthesisLevel $level
+ * @property string $side
+ * @property Collection $products
  */
 class Item extends Model
 {
     use HasFactory;
 
-    public function product(): belongsTo
+    protected $casts = [
+        'side' => ProthesisSide::class,
+    ];
+
+    public function products(): belongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function orderItem(): belongsTo
+    {
+        return $this->belongsTo(OrderItems::class, 'order_items_id');
     }
 
     public function order(): belongsTo

@@ -20,6 +20,10 @@ class SendProposalPriceAction
         private readonly IUserRepository $userRepository,
     ) {}
 
+    /**
+     * @param CreateProposalPriceDTO $dto
+     * @return JsonResponse
+     */
     public function execute(CreateProposalPriceDTO $dto): JsonResponse
     {
         $proposalPrice = $this->proposalPriceRepository->create($dto);

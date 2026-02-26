@@ -12,13 +12,23 @@ class CategoryController extends Controller
     /** @return View */
     public function list(): View
     {
-        return view('/app-page/admin/list', ['categories' => Category::all()]);
+        return view(
+            view: '/app-page/admin/list',
+            data: [
+                'categories' => Category::orderBy('id', 'asc')->get(),
+                'title' => 'FADVIS: Админка - Категории',
+            ]);
     }
 
     /** @return View */
     public function create(): View
     {
-        return view('/app-page/admin/category/create-category');
+        return view(
+            view: '/app-page/admin/category/create-category',
+            data: [
+                'title' => 'FADVIS: Админка - Создать категорию',
+            ],
+        );
     }
 
     /**
@@ -27,9 +37,12 @@ class CategoryController extends Controller
      */
     public function update(Category $category): View
     {
-        return view('/app-page/admin/category/update-category', [
-            'category' => $category,
-            'statuses' => Status::getAllStatus(),
-        ]);
+        return view('/app-page/admin/category/update-category',
+            data: [
+                'category' => $category,
+                'statuses' => Status::getAllStatus(),
+                'title'    => 'FADVIS: Админка - Редактировать категорию',
+            ],
+        );
     }
 }

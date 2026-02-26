@@ -22,8 +22,7 @@ class CategoryRepository implements ICategoryRepository
         $category->name = $dto->name;
         $category->slug = $dto->slug;
         $category->second_name = $dto->second_name;
-        $category->description_index = $dto->description_index;
-        $category->description_page = $dto->description_page;
+        $category->description = $dto->description;
         $category->link = $image['url'];
         $category->path = $image['path'];
         $category->status = Status::ACTIVE;
@@ -35,19 +34,19 @@ class CategoryRepository implements ICategoryRepository
 
     /**
      * @param UpdateCategoryDTO $dto
+     * @param array|null $image
      * @return Category
      */
     public function update(UpdateCategoryDTO $dto, array $image = null): Category
     {
         $category = $dto->category;
-        $category->name = $dto->name ?? $category->name;
-        $category->slug = $dto->slug ?? $category->slug;
-        $category->second_name = $dto->second_name ?? $category->second_name;
-        $category->description_index = $dto->description_index ?? $category->description_index;
-        $category->description_page = $dto->description_page ?? $category->description_page;
-        $category->link = $image['url'] ?? $category->link;
-        $category->path = $image['path'] ?? $category->path;
-        $category->status = $dto->status ?? $category->status;
+        $category->name = $dto->name ?: $category->name;
+        $category->slug = $dto->slug ?: $category->slug;
+        $category->second_name = $dto->second_name ?: $category->second_name;
+        $category->description = $dto->description ?: $category->description;
+        $category->link = !empty($image) ? $image['url'] : $category->link;
+        $category->path = !empty($image) ? $image['path'] : $category->path;
+        $category->status = $dto->status ?: $category->status;
 
         $category->save();
 

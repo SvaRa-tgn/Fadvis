@@ -5,7 +5,11 @@ namespace App\Providers;
 use App\Interfaces\ICategoryRepository;
 use App\Interfaces\IColorRepository;
 use App\Interfaces\IFindRoute;
+use App\Interfaces\IGenerateOrderPdfService;
 use App\Interfaces\IImageRepository;
+use App\Interfaces\IItemRepository;
+use App\Interfaces\IOrderItemsRepository;
+use App\Interfaces\IMakeProthesisService;
 use App\Interfaces\IOrderRepository;
 use App\Interfaces\IPatientImageRepository;
 use App\Interfaces\IPatientRepository;
@@ -17,6 +21,8 @@ use App\Interfaces\IUserRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ColorRepository;
 use App\Repositories\ImageRepository;
+use App\Repositories\ItemRepository;
+use App\Repositories\OrderItemsRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PatientImageRepository;
 use App\Repositories\PatientRepository;
@@ -26,6 +32,8 @@ use App\Repositories\ProposalPriceRepository;
 use App\Repositories\ProposalProthesisRepository;
 use App\Repositories\UserRepository;
 use App\Service\FindRouteService;
+use App\Service\GenerateOrderPdfService;
+use App\Service\MakeProthesisService;
 use Illuminate\Support\ServiceProvider;
 
 class InterfaceProvider extends ServiceProvider
@@ -45,6 +53,10 @@ class InterfaceProvider extends ServiceProvider
         $this->app->bind(IProductRepository::class, ProductRepository::class);
         $this->app->bind(IProductImageRepository::class, ProductImageRepository::class);
         $this->app->bind(IOrderRepository::class, OrderRepository::class);
+        $this->app->bind(IItemRepository::class, ItemRepository::class);
+        $this->app->bind(IMakeProthesisService::class, MakeProthesisService::class);
+        $this->app->bind(IOrderItemsRepository::class, OrderItemsRepository::class);
+        $this->app->bind(IGenerateOrderPdfService::class, GenerateOrderPdfService::class);
     }
 
     /** Bootstrap services. */

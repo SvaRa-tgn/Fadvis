@@ -49,20 +49,20 @@ class UserRepository implements IUserRepository
     public function update(UpdateUserDTO $dto): User
     {
         $user = $dto->user;
-        $user->surname = $dto->surname ?? $dto->user->surname;
-        $user->name = $dto->name ?? $dto->user->name;
-        $user->patronymic = $dto->patronymic ?? $dto->user->patronymic;
-        $user->role = $dto->role ?? $dto->user->role;
-        $user->email = $dto->email ?? $dto->user->email;
-        $user->phone = $dto->phone ?? $dto->user->phone;
-        $user->site = $dto->site ?? $dto->user->site;
-        $user->messenger = $dto->messenger ?? $dto->user->messenger;
-        $user->organization = $dto->organization ?? $dto->user->organization;
-        $user->address = $dto->address ?? $dto->user->address;
-        $user->inn = $dto->inn ?? $dto->user->inn;
-        $user->ogrn = $dto->ogrn ?? $dto->user->ogrn;
-        $user->status = $dto->status ?? $dto->user->status;
-        $user->password = Hash::make($dto->password) ?? $dto->user->password;
+        $user->surname = $dto->surname ?? $user->surname;
+        $user->name = $dto->name ?? $user->name;
+        $user->patronymic = $dto->patronymic ?? $user->patronymic;
+        $user->role = $dto->role ?? $user->role;
+        $user->email = $dto->email ?? $user->email;
+        $user->phone = $dto->phone ?? $user->phone;
+        $user->site = $dto->site ?? $user->site;
+        $user->messenger = $dto->messenger ?? $user->messenger;
+        $user->organization = $dto->organization ?? $user->organization;
+        $user->address = $dto->address ?? $user->address;
+        $user->inn = $dto->inn ?? $user->inn;
+        $user->ogrn = $dto->ogrn ?? $user->ogrn;
+        $user->status = $dto->status ?? $user->status;
+        $user->password = !empty($dto->password) ? Hash::make($dto->password) : $user->password;
 
         $user->save();
 

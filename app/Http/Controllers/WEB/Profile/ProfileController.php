@@ -11,6 +11,12 @@ class ProfileController extends Controller
     /** @return View */
     public function show(): View
     {
-        return view('/app-page/admin/user/private-admin', ['user' => Auth::user()]);
+        return view(
+            view: '/app-page/admin/user/private-admin',
+            data: [
+                'user'  => Auth::user(),
+                'title' => 'FADVIS: Личный кабинет',
+            ],
+        );
     }
 }

@@ -20,9 +20,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->enum('side', ProthesisSide::values());
-            $table->enum('left_type', ProthesisType::values())->nullable()->default(null);
-            $table->enum('right_type', ProthesisType::values())->nullable()->default(null);
+            $table->string('description', 2000)->nullable();
+            $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
     }

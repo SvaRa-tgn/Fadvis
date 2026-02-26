@@ -1,15 +1,15 @@
 @extends('page.admin-page')
 @section('admin-content')
     <main class="main">
-        <div class="main-content">
-            <section class="form-wrap">
-                <div class="form-title-box">
-                    <a class="link-title" href="{{route('admin.category.list')}}">Назад</a>
-                    <div class="title-box">
-                        Создание категории
+        <div class="admin">
+            <section class="wrap-user-data-profile user-data">
+                <div class="admin-title">
+                    <div class="admin-title-page">
+                        Создать категорию
                     </div>
                 </div>
-                <form class="form-admin js-response" method="POST" action="{{ route('api.v1.category.create') }}" enctype="multipart/form-data">
+
+                <form class="js-response" data-form="js-create" method="POST" action="{{ route('api.v1.category.create') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-block form-block-alt">
                         <div class="input-wrap nameError">
@@ -22,14 +22,9 @@
                             <input class="input" name="second_name" id="second_name" required type="text"/>
                         </div>
 
-                        <div class="input-wrap description_indexError text-area-block">
-                            <label class="input-label" for="description_index">Описание на главной</label>
-                            <textarea class="input text-area" name="description_index" id="description_index" required></textarea>
-                        </div>
-
-                        <div class="input-wrap description_pageError text-area-block">
-                            <label class="input-label" for="description_page">Описание на странице</label>
-                            <textarea class="input text-area" name="description_page" id="description_page" required></textarea>
+                        <div class="input-wrap descriptionError text-area-block">
+                            <label class="input-label" for="description">Описание категории</label>
+                            <textarea class="input text-area" name="description" id="description" required></textarea>
                         </div>
 
                         <div class="input-wrap imgError">
@@ -38,19 +33,24 @@
                         </div>
                     </div>
 
-
-                    <div class="button-box">
-                        <a class="user-data-edit red-color password-switch " href="{{route('admin.category.list')}}">Назад</a>
-
-                        <div class="wrap-button js-button ">
-                            <button class="user-data-edit green-color">Создать</button>
+                    <div class="regular-button position-column-2-2">
+                        <div class="button-box">
+                            <a class="button-link red-color" href="{{route('admin.category.list')}}">
+                                Отменить
+                            </a>
                         </div>
 
-                        <div class="wrap-update-button js-preloader hide">
-                            <div class="wrap-spin ">
-                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <div class="button-box">
+                            <button class="button-link js-button green-color">
+                                Создать
+                            </button>
+
+                            <div class="await-response js-preloader hide">
+                                <div class="wrap-spin ">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </div>
+                                <article>Обработка</article>
                             </div>
-                            <article>Обработка</article>
                         </div>
                     </div>
                 </form>

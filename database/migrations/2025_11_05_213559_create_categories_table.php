@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('name', 50)->unique();
             $table->string('slug', 60)->unique();
             $table->string('second_name', 100);
-            $table->string('description_index', 500);
-            $table->string('description_page', 2000);
+            $table->string('description', 3000);
             $table->string('link', 300);
             $table->string('path', 300);
             $table->enum('status', Status::values())->default(Status::ACTIVE);

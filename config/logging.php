@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\UseJsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -53,7 +54,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['stdout', 'single'],
             'ignore_exceptions' => false,
         ],
 
@@ -116,6 +117,13 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'stdout' => [
+            'driver' => 'single',
+            'path' => 'php://stdout',
+            'tap' => [UseJsonFormatter::class],
+            'level' => 'debug',
         ],
     ],
 

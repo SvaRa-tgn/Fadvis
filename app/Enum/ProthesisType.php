@@ -12,8 +12,8 @@ enum ProthesisType: string implements EnumWithCaption
     public function caption(): string
     {
         return match ($this) {
-            self::PROTHESIS_HAND  => 'протез руки',
-            self::PROTHESIS_WRIST => 'протез кисти',
+            self::PROTHESIS_HAND  => 'Протез руки',
+            self::PROTHESIS_WRIST => 'Протез кисти',
         };
     }
 

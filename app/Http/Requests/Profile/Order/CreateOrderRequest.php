@@ -29,10 +29,9 @@ class CreateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient'    => ['required', 'integer', 'exists:patients,id'],
-            'side'       => ['required', 'string'],
-            'left_type'  => ['nullable', 'string'],
-            'right_type' => ['nullable', 'string'],
+            'left_products'  => ['nullable', 'array', 'min:1'],
+            'right_products' => ['nullable', 'array', 'min:1'],
+            'description'    => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -42,23 +41,38 @@ class CreateOrderRequest extends FormRequest
      */
     public function getDto(): CreateOrderDTO
     {
-        if ($this->user()->role !== UserRoles::USER->value) {
+
+        if ($this->user()->role !== UserRoles::USER) {
             throw new ErrorException(
                 message: 'Страница не найдена',
             );
         }
 
+        if (empty($this->input('left_products')) && empty($this->input('right_products'))) {
+            throw new ErrorException(
+                message: 'Не переданы товары',
+            );
+        }
+
+        $patient = Patient::find($this->route('patient'));
+
+        if (!$patient || $patient->user_id !== $this->user()->id) {
+            throw new ErrorException(
+                message: 'Пациент не найден',
+            );
+        }
+
         $random = bin2hex(random_bytes(4));
         $data = $this->user()->id . $random;
-        $number = 'FDV_' . strtoupper(substr(md5($data), 0, 8))
-            . '_' . $this->user()->id . '/' . date('d.m.Y');
+        $number = 'FDV_' . strtoupper(substr(md5($data), 0, 8)) . '_' . $this->user()->id;
 
         return new CreateOrderDTO(
-            patient: Patient::find($this->input('patient')),
-            side: ProthesisSide::tryFrom($this->input('side')),
+            user: $this->user(),
+            patient: $patient,
             number: $number,
-            left_type: ProthesisType::tryFrom($this->input('left_type')),
-            right_type: ProthesisType::tryFrom($this->input('right_type')),
+            leftProducts: $this->input('left_products'),
+            rightProducts: $this->input('right_products'),
+            description: $this->input('description') ?? null,
         );
     }
 }

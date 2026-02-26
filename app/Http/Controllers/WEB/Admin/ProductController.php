@@ -2,29 +2,85 @@
 
 namespace App\Http\Controllers\WEB\Admin;
 
-use App\Actions\WEB\Admin\Category\CategoryListAction;
-use App\Actions\WEB\Admin\Category\CreateCategoryAction;
-use App\Actions\WEB\Admin\Category\UpdateCategoryAction;
-use App\Actions\WEB\Admin\Product\ProductListAction;
+use App\Enum\ProthesisGrip;
+use App\Enum\CountryMade;
+use App\Enum\ManufacturerList;
+use App\Enum\ProthesisLevel;
+use App\Enum\ProthesisSide;
+use App\Enum\ProthesisSize;
+use App\Enum\ProthesisType;
+use App\Enum\ProthesisSystem;
+use App\Enum\Status;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Interfaces\ICategoryRepository;
+use App\Interfaces\IColorRepository;
 use App\Models\Product;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function list(ProductListAction $action): View
+    public function __construct(
+        private readonly IColorRepository $colorRepository,
+        private readonly ICategoryRepository $categoryRepository,
+    ) {}
+
+    /** @return View */
+    public function list(): View
     {
-        return $action->execute();
+        return view(
+            view: '/app-page/admin/list',
+            data: [
+                'products' => Product::orderBy('id', 'asc')->get(),
+                'title'    => 'FADVIS: Админка - товары',
+            ],
+        );
     }
 
-    public function create(CreateCategoryAction $action): View
+    /** @return View */
+    public function create(): View
     {
-        return $action->execute();
+        return view(
+            view: '/app-page/admin/product/create-product',
+            data: [
+                'colors'        => $this->colorRepository->findByStatus(Status::ACTIVE),
+                'sizes'         => ProthesisSize::getAllSizes(),
+                'sides'         => ProthesisSide::getAllSides(),
+                'countries'     => CountryMade::getAllCountry(),
+                'manufacturers' => ManufacturerList::getAllManufacturer(),
+                'categories'    => $this->categoryRepository->findByStatus(Status::ACTIVE),
+                'types'         => ProthesisType::getAllTypes(),
+                'hand_levels'   => ProthesisLevel::getHandItem(),
+                'wrist_levels'  => ProthesisLevel::getWristItem(),
+                'systems'       => ProthesisSystem::getAllSystems(),
+                'grip'          => ProthesisGrip::getAllGrip(),
+                'title'         => 'FADVIS: Админка - Создать товар',
+            ],
+        );
     }
 
-    public function update(UpdateCategoryAction $action, Category $category): View
+    /**
+     * @param Product $product
+     * @return View
+     */
+    public function update(Product $product): View
     {
-        return $action->execute($category);
+        return view(
+            view: '/app-page/admin/product/update-product',
+            data: [
+                'product'       => $product,
+                'colors'        => $this->colorRepository->findByStatus(Status::ACTIVE),
+                'sizes'         => ProthesisSize::getAllSizes(),
+                'sides'         => ProthesisSide::getAllSides(),
+                'countries'     => CountryMade::getAllCountry(),
+                'manufacturers' => ManufacturerList::getAllManufacturer(),
+                'categories'    => $this->categoryRepository->findByStatus(Status::ACTIVE),
+                'types'         => ProthesisType::getAllTypes(),
+                'hand_levels'   => ProthesisLevel::getHandItem(),
+                'wrist_levels'  => ProthesisLevel::getWristItem(),
+                'systems'       => ProthesisSystem::getAllSystems(),
+                'grip'          => ProthesisGrip::getAllGrip(),
+                'title'         => 'FADVIS: Админка - Редактировать товар',
+            ],
+        );
     }
 }

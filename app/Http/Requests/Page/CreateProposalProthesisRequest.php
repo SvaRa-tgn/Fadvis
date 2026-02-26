@@ -5,7 +5,7 @@ namespace App\Http\Requests\Page;
 use App\DTO\Page\CreateProposalProthesisDTO;
 use App\Enum\AgePeriod;
 use App\Enum\ProthesisFunction;
-use App\Enum\ProthesisType;
+use App\Enum\ProthesisLevel;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -35,7 +35,7 @@ class CreateProposalProthesisRequest extends FormRequest
             'is_program'         => ['required', 'boolean'],
             'prothesis_function' => ['required', 'string'],
             'questions'          => ['nullable', 'string', 'max:1000'],
-            'type'               => ['nullable', 'string', 'max:30'],
+            'prosthesis_level'   => ['required', 'string', 'max:30'],
         ];
     }
 
@@ -45,10 +45,12 @@ class CreateProposalProthesisRequest extends FormRequest
             'name.cyrillic'       => 'Имя должно состоять из русских букв',
             'surname.cyrillic'    => 'Фамилия должна состоять из русских букв',
             'patronymic.cyrillic' => 'Отчество должно состоять из русских букв',
-            'email'               => 'Вы ввели неправильный email',
-            'phone'               => 'Вы ввели не правильный телефон',
-            'interest.cyrillic'   => 'Поле должно состоять из русских букв',
-            'questions.cyrillic'  => 'Поле должно состоять из русских букв',
+            'email.email'         => 'Вы ввели неправильный email',
+            'email.required'      => 'Вы не ввели email',
+            'phone.phone'         => 'Вы ввели не правильный телефон',
+            'phone.required'      => 'Вы не ввели телефон',
+            'city.required'       => 'Вы не ввели город',
+            'is_program.required' => 'Вы не выбрали вариант',
         ];
     }
 
@@ -56,7 +58,7 @@ class CreateProposalProthesisRequest extends FormRequest
     {
         return new CreateProposalProthesisDTO(
             agePeriod: AgePeriod::tryFrom($this->input('age_period')),
-            type: ProthesisType::tryFrom($this->input('type')),
+            level: ProthesisLevel::tryFrom($this->input('prosthesis_level')),
             function: ProthesisFunction::tryFrom($this->input('prothesis_function')),
             name: $this->input('name'),
             surname: $this->input('surname'),

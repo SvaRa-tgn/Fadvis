@@ -12,13 +12,24 @@ class ColorController extends Controller
     /** @return View */
     public function list(): View
     {
-        return view('/app-page/admin/list', ['colors' => Color::all()]);
+        return view(
+            view: '/app-page/admin/list',
+            data: [
+                'colors' => Color::all(),
+                'title' => 'FADVIS: Админка - Цвета',
+            ],
+        );
     }
 
     /** @return View */
     public function create(): View
     {
-        return view('/app-page/admin/color/create-color');
+        return view(
+            view: '/app-page/admin/color/create-color',
+            data: [
+                'title' => 'FADVIS: Админка - Создать цвет',
+            ],
+        );
     }
 
     /**
@@ -32,6 +43,7 @@ class ColorController extends Controller
             data:[
                 'color' => $color,
                 'statuses' => Status::getAllStatus(),
+                'title' => 'FADVIS: Админка - Редактировать цвет',
             ],
         );
     }

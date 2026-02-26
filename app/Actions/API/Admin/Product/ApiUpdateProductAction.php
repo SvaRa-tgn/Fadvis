@@ -6,6 +6,7 @@ use App\DTO\Admin\Product\UpdateProductDTO;
 use App\Enum\ErrorType;
 use App\Enum\PopUpContent;
 use App\Enum\StoragePath;
+use App\Exceptions\CreateModelException;
 use App\Http\Resources\ProductResource;
 use App\Interfaces\IProductRepository;
 use App\Service\StorageService;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class ApiUpdateProductAction
 {
@@ -20,12 +22,17 @@ class ApiUpdateProductAction
         private readonly IProductRepository $productRepository,
     ) {}
 
-    /** @throws Exception */
+    /**
+     * @param UpdateProductDTO $dto
+     * @return JsonResponse
+     * @throws CreateModelException|Throwable
+     */
     public function execute(UpdateProductDTO $dto): JsonResponse
     {
         try {
             DB::beginTransaction();
             $image = [];
+
             if ($dto->img !== null) {
                 StorageService::deleteImage($dto->product->path);
 
@@ -40,8 +47,8 @@ class ApiUpdateProductAction
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception(
-                message: ErrorType::ERROR_INFO->caption(),
+            throw new CreateModelException(
+                message: ErrorType::ERROR_INFO->caption() . $e->getMessage(),
             );
         }
 
@@ -49,9 +56,8 @@ class ApiUpdateProductAction
             data: [
                 'data'    => new ProductResource($product),
                 'message' => [
-                    'title'   => PopUpContent::PRODUCT_UPDATE_SUCCESS->caption(),
-                    'message' => PopUpContent::PRODUCT_UPDATE_SUCCESS_INFO->caption(),
-                    'route'   => route('admin.product.list'),
+                    'message' => PopUpContent::PRODUCT_UPDATE_SUCCESS->caption(),
+                    'link'    => route('admin.product.list'),
                 ],
             ],
             status: Response::HTTP_ACCEPTED,

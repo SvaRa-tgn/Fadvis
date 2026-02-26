@@ -49,11 +49,15 @@ class NewPasswordAction
         );
 
         return $status === Password::PASSWORD_RESET
-            ? response()->json([
-                'status'  => __($status),
-                'message' => 'Ваш пароль изменен',
-                'route'   => route('main'),
-            ])
+            ? response()->json(
+                data: [
+                    'message' => [
+                        'status'  => __($status),
+                        'message' => 'Ваш пароль изменен',
+                        'link'    => route('main'),
+                    ],
+                ],
+            )
             : response()->json(['email' => __($status)], 422);
     }
 

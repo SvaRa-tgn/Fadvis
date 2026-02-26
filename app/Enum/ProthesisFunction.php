@@ -6,7 +6,7 @@ use App\Interfaces\EnumWithCaption;
 
 enum ProthesisFunction: string implements EnumWithCaption
 {
-    case COSMETIC  = 'cosmetic';
+    case COSMETIC = 'cosmetic';
     case ACTIVE   = 'active';
     case MECHANIC = 'mechanic';
 
@@ -25,6 +25,15 @@ enum ProthesisFunction: string implements EnumWithCaption
             self::COSMETIC->value,
             self::ACTIVE->value,
             self::MECHANIC->value,
+        ];
+    }
+
+    public static function getAllTypes(): array
+    {
+        return [
+            self::COSMETIC,
+            self::ACTIVE,
+            self::MECHANIC,
         ];
     }
 }

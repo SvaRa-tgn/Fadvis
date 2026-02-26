@@ -13,8 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property string $slug
  * @property string $second_name
- * @property string $description_index
- * @property string $description_page
+ * @property string $description
  * @property string $link
  * @property string $path
  * @property string $status
@@ -26,9 +25,13 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function getStatus(): Status
+    protected $casts = [
+        'status' => Status::class,
+    ];
+
+    public function getRouteKeyName(): string
     {
-        return Status::tryFrom($this->status);
+        return 'slug';
     }
 
     public function products(): HasMany

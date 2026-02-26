@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>FADVIS</title>
+    <title>{{$title}}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,7 +12,7 @@
     <!--font-->
     <link rel="preconnect" href="{{asset('https://fonts.googleapis.com')}}">
     <link rel="preconnect" href="{{asset('https://fonts.gstatic.com')}}" crossorigin>
-    <link href="{{asset('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap')}}"
+    <link href="{{asset('https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap')}}"
           rel="stylesheet">
 
     <!-- Place favicon.ico in the root directory -->
@@ -20,18 +20,25 @@
     <link rel="stylesheet" href="{{asset('css/normalize.css?v=').time()}}">
     <link rel="stylesheet" href="{{asset('css/styles.min.css?v=').time()}}">
     <link rel="stylesheet" href="{{asset('css/header.min.css?v=').time()}}">
+    <link rel="stylesheet" href="{{asset('css/footer.min.css?v=').time()}}">
+    <link rel="stylesheet" href="{{asset('css/slider.min.css?v=').time()}}">
     <link rel="stylesheet" href="{{asset('css/main.min.css?v=').time()}}">
     <link rel="stylesheet" href="{{asset('css/page.min.css?v=').time()}}">
-    <link rel="stylesheet" href="{{asset('css/footer.min.css?v=').time()}}">
     <link rel="stylesheet" href="{{asset('css/form.min.css?v=').time()}}">
     <link rel="stylesheet" href="{{asset('css/popup.min.css?v=').time()}}">
-
+    <link rel="stylesheet" href="{{asset('css/action.min.css?v=').time()}}">
     @stack('styles')
+    <link rel="stylesheet" href="{{asset('css/order.min.css?v=').time()}}">
+    <link rel="stylesheet" href="{{asset('css/adaptive.min.css?v=').time()}}">
+
+
 
     <script src="{{asset('js/jquery.min.js?v=').time()}}" defer></script>
     <script src="{{asset('js/main.js?v=').time()}}" defer></script>
     <script src="{{asset('js/request.js?v=').time()}}" defer></script>
+    <script src="{{asset('js/authRequest.js?v=').time()}}" defer></script>
     <script src="{{asset('js/request-order.js?v=').time()}}" defer></script>
+    <!--<script src="{{asset('js/order.js?v=').time()}}" defer></script>-->
 
     <meta name="theme-color" content="#fafafa">
 </head>

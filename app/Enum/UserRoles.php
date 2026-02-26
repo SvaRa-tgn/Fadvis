@@ -8,8 +8,8 @@ use Spatie\LaravelData\Attributes\Validation\Enum;
 enum UserRoles: string implements EnumWithCaption
 {
     case MASTER = 'master';
-    case ADMIN = 'admin';
-    case USER = 'user';
+    case ADMIN  = 'admin';
+    case USER   = 'user';
 
     public function caption(): string
     {

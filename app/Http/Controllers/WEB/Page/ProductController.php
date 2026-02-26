@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\WEB\Page;
 
+use App\Enum\ProthesisGrip;
 use App\Enum\CountryMade;
 use App\Enum\ManufacturerList;
 use App\Enum\ProthesisLevel;
 use App\Enum\ProthesisSide;
 use App\Enum\ProthesisSize;
 use App\Enum\ProthesisType;
+use App\Enum\ProthesisSystem;
 use App\Enum\Status;
 use App\Http\Controllers\Controller;
 use App\Interfaces\ICategoryRepository;
@@ -25,7 +27,7 @@ class ProductController extends Controller
     /** @return View */
     public function list(): View
     {
-        return view('/app-page/admin/list', ['products' => Product::all()]);
+        return view('/app-page/admin/list', ['products' => Product::orderBy('id', 'asc')->get()]);
     }
 
     /** @return View */
@@ -43,6 +45,8 @@ class ProductController extends Controller
                 'types'         => ProthesisType::getAllTypes(),
                 'hand_levels'   => ProthesisLevel::getHandItem(),
                 'wrist_levels'  => ProthesisLevel::getWristItem(),
+                'views'         => ProthesisSystem::getAllViews(),
+                'collection'    => ProthesisGrip::getAllCollection(),
             ],
         );
     }
@@ -66,6 +70,8 @@ class ProductController extends Controller
                 'types'         => ProthesisType::getAllTypes(),
                 'hand_levels'   => ProthesisLevel::getHandItem(),
                 'wrist_levels'  => ProthesisLevel::getWristItem(),
+                'views'         => ProthesisSystem::getAllViews(),
+                'collection'    => ProthesisGrip::getAllCollection(),
             ],
         );
     }

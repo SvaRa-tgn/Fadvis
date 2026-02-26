@@ -2,18 +2,18 @@
 
 namespace App\DTO\Profile\Order;
 
-use App\Enum\ProthesisSide;
-use App\Enum\ProthesisType;
 use App\Models\Patient;
 use App\Models\User;
 
-readonly class CreateOrderDTO
+class CreateOrderDTO
 {
     public function __construct(
-        public Patient        $patient,
-        public ProthesisSide  $side,
-        public string         $number,
-        public ?ProthesisType $left_type = null,
-        public ?ProthesisType $right_type = null,
+        public readonly User    $user,
+        public readonly Patient $patient,
+        public readonly string  $number,
+        public ?array           $leftProducts = null,
+        public ?array           $rightProducts = null,
+        public readonly ?string $description = null,
+        public ?float           $amount = null,
     ) {}
 }

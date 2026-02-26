@@ -20,6 +20,10 @@ class SendProposalProthesisAction
         private readonly IUserRepository $userRepository,
     ) {}
 
+    /**
+     * @param CreateProposalProthesisDTO $dto
+     * @return JsonResponse
+     */
     public function execute(CreateProposalProthesisDTO $dto): JsonResponse
     {
         $proposalProthesis = $this->proposalProthesisRepository->create($dto);

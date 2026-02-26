@@ -14,6 +14,7 @@ class ShowFormAction
         private readonly IUserRepository $userRepository,
     ) {}
 
+    /** @return RedirectResponse|View */
     public function execute(): RedirectResponse|view
     {
         if ($this->userRepository->findByRole(UserRoles::MASTER)) {
@@ -24,7 +25,7 @@ class ShowFormAction
                 data: [
                     'messengers' => MessengerType::getAllMessenger(),
                     'roles'      => UserRoles::getAllRoles(),
-                ]
+                ],
             );
         }
     }
