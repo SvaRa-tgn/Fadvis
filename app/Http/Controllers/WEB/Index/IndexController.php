@@ -4,14 +4,10 @@ namespace App\Http\Controllers\WEB\Index;
 
 use App\Actions\IndexAction;
 use App\Http\Controllers\Controller;
-use App\Interfaces\IUserRepository;
 use Illuminate\View\View;
 
 class IndexController extends Controller
 {
-    public function __construct(
-        private readonly IUserRepository $userRepository,
-    ) {}
 
     public function index(IndexAction $action): View
     {

@@ -206,8 +206,8 @@ const OrderFilter = {
         let list = products.filter(p => {
             if (p.level !== knot) return false;
             if (side === 'left' && !['left', 'universal'].includes(p.side)) return false;
-            if (side === 'right' && !['right', 'universal'].includes(p.side)) return false;
-            return true;
+            return !(side === 'right' && !['right', 'universal'].includes(p.side));
+
         });
 
         if (initial) return list;
@@ -224,9 +224,8 @@ const OrderFilter = {
 
             if (system && p.view !== this.SYSTEM_MAP[system]) return false;
 
-            if (size && ![size, 'Индивидуальный'].includes(p.size)) return false;
+            return !(size && ![size, 'Индивидуальный'].includes(p.size));
 
-            return true;
         });
     },
 
@@ -236,7 +235,8 @@ const OrderFilter = {
         const knot = this.getCurrentKnot(orderBox);
         const selected = this.selectedProducts[knot] || [];
 
-        const list = box.find('.item-select-list').empty();
+        const list = box.find('.item-select-list');
+        list.empty();
 
         if (!products.length) {
             list.append(`<li class="item-select-item empty">Нет товаров</li>`);
@@ -245,18 +245,18 @@ const OrderFilter = {
 
         products.forEach(p => {
             list.append(`
-                <li class="item-select-item">
-                    <label class="data-item">
-                        <input type="checkbox"
-                               class="input checkbox-order"
-                               value="${p.id}"
-                               ${selected.includes(String(p.id)) ? 'checked' : ''}
-                               data-product='${JSON.stringify(p)}'>
-                        <article class="data-item-info">${p.name}</article>
-                        <article class="data-item-info">${p.price} ₽</article>
-                    </label>
-                </li>
-            `);
+            <li class="item-select-item">
+                <label class="data-item">
+                    <input type="checkbox"
+                           class="input checkbox-order"
+                           value="${p.id}"
+                           ${selected.includes(String(p.id)) ? 'checked' : ''}
+                           data-product='${JSON.stringify(p)}'>
+                    <article class="data-item-info">${p.name}</article>
+                    <article class="data-item-info">${p.price} ₽</article>
+                </label>
+            </li>
+        `);
         });
     },
 

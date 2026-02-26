@@ -45,8 +45,8 @@ class ProductController extends Controller
                 'types'         => ProthesisType::getAllTypes(),
                 'hand_levels'   => ProthesisLevel::getHandItem(),
                 'wrist_levels'  => ProthesisLevel::getWristItem(),
-                'views'         => ProthesisSystem::getAllViews(),
-                'collection'    => ProthesisGrip::getAllCollection(),
+                'views'         => ProthesisSystem::getAllSystems(),
+                'collection'    => ProthesisGrip::getAllGrip(),
             ],
         );
     }
@@ -70,8 +70,8 @@ class ProductController extends Controller
                 'types'         => ProthesisType::getAllTypes(),
                 'hand_levels'   => ProthesisLevel::getHandItem(),
                 'wrist_levels'  => ProthesisLevel::getWristItem(),
-                'views'         => ProthesisSystem::getAllViews(),
-                'collection'    => ProthesisGrip::getAllCollection(),
+                'views'         => ProthesisSystem::getAllSystems(),
+                'collection'    => ProthesisGrip::getAllGrip(),
             ],
         );
     }

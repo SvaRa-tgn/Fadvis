@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\WEB\Page;
 
-use App\Actions\WEB\Page\ShowCategoryAction;
 use App\Enum\AgePeriod;
 use App\Enum\Status;
 use App\Http\Controllers\Controller;
 use App\Interfaces\ICategoryRepository;
-use App\Interfaces\IColorRepository;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +15,6 @@ class PageController extends Controller
 {
     public function __construct(
         private readonly ICategoryRepository $categoryRepository,
-        private readonly IColorRepository $colorRepository,
     ) {}
 
     /** @return View */

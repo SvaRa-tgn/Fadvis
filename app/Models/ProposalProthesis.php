@@ -6,7 +6,6 @@ use App\Enum\AgePeriod;
 use App\Enum\ProposalStatus;
 use App\Enum\ProthesisFunction;
 use App\Enum\ProthesisLevel;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -27,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProposalProthesis extends Model
 {
-    use HasFactory;
 
     protected $casts = [
         'prothesis_level'    => ProthesisLevel::class,

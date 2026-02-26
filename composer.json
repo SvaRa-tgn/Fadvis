@@ -9,7 +9,7 @@
         "barryvdh/laravel-dompdf": "^3.1",
         "elforastero/transliterate": "^7.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "10.48.17",
+        "laravel/framework": "10.48.29",
         "laravel/helpers": "^1.6",
         "laravel/sanctum": "^3.3",
         "laravel/scout": "^10.8",

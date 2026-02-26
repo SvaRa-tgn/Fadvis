@@ -77,7 +77,7 @@ let requestData = {
                 notify       = notification.find('.notification'),
                 linkAdmin    = $('.link-admin'),
                 hide         = $('.non-actual').find('.input'),
-                linkOrder    = form
+                linkOrder    = form;
 
             button.addClass('hide');
             preloader.removeClass('hide');

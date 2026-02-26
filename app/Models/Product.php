@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use App\Enum\ProthesisGrip;
 use App\Enum\CountryMade;
 use App\Enum\ManufacturerList;
+use App\Enum\ProthesisGrip;
 use App\Enum\ProthesisLevel;
 use App\Enum\ProthesisSide;
 use App\Enum\ProthesisSize;
-use App\Enum\ProthesisType;
 use App\Enum\ProthesisSystem;
+use App\Enum\ProthesisType;
 use App\Enum\Status;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -45,7 +44,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Product extends Model
 {
-    use HasFactory;
 
     protected $casts = [
         'status'       => Status::class,

@@ -324,63 +324,6 @@
             </div>
         </li>
 
-        <li class="pop-up-item view-product-box hide">
-            <div class="order-choice-item position-row-auto-fr">
-                <div class="pop-up-header">
-                    <div class="pop-up-close">
-                        <i class="fa fa-times js-close-view" aria-hidden="true"></i>
-                    </div>
-                    <div class="pop-up-title">
-                        Выбор комплектующих
-                    </div>
-                </div>
-                <div class="wrap-choice-img">
-                    <img class="item-img" src="../img/temp/2.jpg" alt="Fadvis">
-                    <div class="filter">
-                        <div class="filter-box-order">
-                            <article class="filter-article">
-                                Кисть функционально-косметическая CYBER-M правая XS
-                            </article>
-                        </div>
-                    </div>
-                </div>
-                <ul class="product-info-list">
-                    <li class="product-info-item">
-                        <article class="description">Цена:</article>
-                        <article class="description" data-field="price">17000 <i class="fa fa-ruble"></i> </article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Размер:</article>
-                        <article class="description" data-field="size">XXS</article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Сторона протезирования:</article>
-                        <article class="description" data-field="side">Левая</article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Протез:</article>
-                        <article class="description" data-field="type">Рука</article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Узел протеза:</article>
-                        <article class="description" data-field="level">Плечевой узел</article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Объем пястья, см:</article>
-                        <article class="description" data-field="volume_size">Индивидуально</article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Длина от запястья до конца среднего пальца, см:</article>
-                        <article class="description" data-field="lenght_size">Индивидуально</article>
-                    </li>
-                    <li class="product-info-item">
-                        <article class="description">Производитель:</article>
-                        <article class="description" data-field="manufacturer">Fadvis</article>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
         @if (isset($order) && $order)
             <li class="pop-up-item resend-box hide">
                 <div class="pop-up-header">
